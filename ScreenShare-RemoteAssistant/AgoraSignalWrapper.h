@@ -1,0 +1,6 @@
+#ifndef __AGORASIGNALWRAPPER_H__
+#define __AGORASIGNALWRAPPER_H__
+
+
+
+#endif

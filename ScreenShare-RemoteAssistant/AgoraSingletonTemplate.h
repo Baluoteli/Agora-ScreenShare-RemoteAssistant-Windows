@@ -1,0 +1,6 @@
+#ifndef __AGORASINGLETONTEMPLATE_H__
+#define __AGORASINGLETONTEMPLATE_H__
+
+
+
+#endif
