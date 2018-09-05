@@ -107,6 +107,7 @@
     <ClInclude Include="AgoraSignalWrapper.h" />
     <ClInclude Include="AgoraSingletonTemplate.h" />
     <ClInclude Include="AgoraUitlc.h" />
+    <ClInclude Include="AGSignalCallBack.h" />
     <ClInclude Include="MediaDef.h" />
     <ClInclude Include="RemoteAssistantDlg.h" />
     <ClInclude Include="Resource.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="AGEngineEventHandler.cpp" />
     <ClCompile Include="AgoraConfig.cpp" />
     <ClCompile Include="AgoraMediaWrapper.cpp" />
+    <ClCompile Include="AGSignalCallBack.cpp" />
     <ClCompile Include="AgoraSignalWrapper.cpp" />
     <ClCompile Include="RemoteAssistantDlg.cpp" />
     <ClCompile Include="ScreenShare-RemoteAssistant.cpp" />

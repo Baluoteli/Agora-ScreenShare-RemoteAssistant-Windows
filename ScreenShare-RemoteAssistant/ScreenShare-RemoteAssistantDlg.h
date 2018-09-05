@@ -39,6 +39,8 @@ protected:
 	afx_msg LRESULT OnEIDFirstRemoteFrameDecoded(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDUserJoined(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDUserOffline(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnEIDMuteVideo(WPARAM wParam,LPARAM lParam);
+	afx_msg LRESULT OnEIDMuteAudio(WPARAM wParam,LPARAM lParam);
 	afx_msg LRESULT OnEIDConnectionLost(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnEIDVideoDeviceChanged(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT OnRemoteVideoStat(WPARAM wParam, LPARAM lParam);
@@ -70,8 +72,11 @@ private:
 	HWND m_hScreenWnd;
 	std::map<UINT, BOOL> m_mapRemoteUserStatus;
 
+	static UINT uSelectUID;
+
 public:
 	afx_msg void OnBnClickedButtonJoin();
 	afx_msg void OnBnClickedButtonLeave();
 	afx_msg void OnBnClickedButtonRemoteAssistant();
+	afx_msg void OnLbnDblclkListUserlist();
 };

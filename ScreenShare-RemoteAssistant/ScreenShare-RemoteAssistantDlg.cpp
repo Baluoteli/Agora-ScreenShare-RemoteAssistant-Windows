@@ -50,7 +50,7 @@ END_MESSAGE_MAP()
 
 // CScreenShareRemoteAssistantDlg dialog
 
-
+UINT CScreenShareRemoteAssistantDlg::uSelectUID = 0;
 
 CScreenShareRemoteAssistantDlg::CScreenShareRemoteAssistantDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CScreenShareRemoteAssistantDlg::IDD, pParent),
@@ -85,9 +85,12 @@ BEGIN_MESSAGE_MAP(CScreenShareRemoteAssistantDlg, CDialogEx)
 	ON_MESSAGE(WM_MSGID(EID_FIRST_REMOTE_VIDEO_DECODED), &CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CScreenShareRemoteAssistantDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CScreenShareRemoteAssistantDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_USER_MUTE_AUDIO),&CScreenShareRemoteAssistantDlg::OnEIDMuteAudio)
+	ON_MESSAGE(WM_MSGID(EID_USER_MUTE_VIDEO), &CScreenShareRemoteAssistantDlg::OnEIDMuteVideo)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STAT), &CScreenShareRemoteAssistantDlg::OnRemoteVideoStat)
 	ON_MESSAGE(WM_MSGID(EID_START_RCDSRV), &CScreenShareRemoteAssistantDlg::OnStartRecordingService)
 	ON_MESSAGE(WM_MSGID(EID_STOP_RCDSRV), &CScreenShareRemoteAssistantDlg::OnStopRecordingService)
+	ON_LBN_DBLCLK(IDC_LIST_UserList, &CScreenShareRemoteAssistantDlg::OnLbnDblclkListUserlist)
 END_MESSAGE_MAP()
 
 
@@ -195,6 +198,7 @@ void CScreenShareRemoteAssistantDlg::initCtrl()
 	m_editUID.SetWindowTextW(CAgoraWrapperUtilc::s2cs(strLoginUID));
 
 	m_pAgoraConfig = CAgoraConfig::getInstance();
+	m_btnRemoteAssistant.EnableWindow(FALSE);
 }
 
 void CScreenShareRemoteAssistantDlg::initMediaResource()
@@ -261,28 +265,27 @@ void CScreenShareRemoteAssistantDlg::OnBnClickedButtonRemoteAssistant()
 	CString strSelectText;
 	int nCurSel = m_ltUserList.GetCurSel();
 	m_ltUserList.GetText(nCurSel, strSelectText);
-	static UINT uSelectUID = 0;
 	UINT uRemoteID = CAgoraWrapperUtilc::str2int(CAgoraWrapperUtilc::cs2s(strSelectText));
+	if (uRemoteID == uSelectUID)
+		AfxMessageBox(L"Already Remote Assisting .please Switch Remote User..");
+	
+	if (0 != uRemoteID)
+		m_btnRemoteAssistant.EnableWindow(TRUE);
 
-	std::map<UINT, BOOL>::iterator it = m_mapRemoteUserStatus.find(uRemoteID);
-	if (m_mapRemoteUserStatus.end() != it) {
+	for (std::map<UINT, BOOL>::iterator it = m_mapRemoteUserStatus.begin(); m_mapRemoteUserStatus.end() != it; it++) {
 
-		if (uSelectUID != uRemoteID && uSelectUID != 0) {
-			m_pAgoraMediaWrapper->muteRemoteAudioStream(uSelectUID, true);
-			m_pAgoraMediaWrapper->muteRemoteVideoStream(uSelectUID, true);
-			m_pAgoraMediaWrapper->muteRemoteVideoStream(uRemoteID, false);
-			m_pAgoraMediaWrapper->muteRemoteAudioStream(uRemoteID, false);
+		if (it->first == uRemoteID) {
+			m_pAgoraMediaWrapper->muteRemoteAudioStream(it->first, false);
+			m_pAgoraMediaWrapper->muteRemoteVideoStream(it->first, false);
 		}
-		else if (uSelectUID == 0) {
-			m_pAgoraMediaWrapper->muteRemoteVideoStream(uRemoteID, false);
-			m_pAgoraMediaWrapper->muteRemoteAudioStream(uRemoteID, false);
+		else {
+			UINT uID = it->first;
+			m_pAgoraMediaWrapper->muteRemoteAudioStream(uID, true);
+			m_pAgoraMediaWrapper->muteRemoteVideoStream(uID, true);
 		}
-		else
-			AfxMessageBox(L"Already Remote Assisting..please Switch Remote User.");
 	}
 
-	if (uSelectUID != uRemoteID)
-		uSelectUID = uRemoteID;
+	uSelectUID = uRemoteID;
 }
 
 LRESULT CScreenShareRemoteAssistantDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
@@ -312,7 +315,11 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded(WPARAM wPar
 		}
 		else if (IDCANCEL == nResponse) {
 			//Notify MainWnd RemoteAssistant Finished..
-
+			m_btnRemoteAssistant.EnableWindow(FALSE);
+			m_pAgoraMediaWrapper->setRemoteVideo(NULL, uSelectUID);
+			m_pAgoraMediaWrapper->muteRemoteAudioStream(uSelectUID, true);
+			m_pAgoraMediaWrapper->muteRemoteVideoStream(uSelectUID, true);
+			uSelectUID = 0;
 		}
 
 		delete lpData; lpData = nullptr;
@@ -329,13 +336,16 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lP
 	if (lpData) {
 
 		CString strRemoteID = CAgoraWrapperUtilc::s2cs(CAgoraWrapperUtilc::int2str(lpData->uid));
-		m_ltUserList.AddString(strRemoteID);
+		if (CB_ERR == m_ltUserList.FindStringExact(0, strRemoteID)) {
 
-		if (m_pAgoraMediaWrapper) {
-			m_pAgoraMediaWrapper->muteRemoteVideoStream(lpData->uid, true);
-			m_pAgoraMediaWrapper->muteRemoteAudioStream(lpData->uid, true);
+			m_ltUserList.AddString(strRemoteID);
 
-			m_mapRemoteUserStatus[lpData->uid] = FALSE;
+			if (m_pAgoraMediaWrapper) {
+				m_pAgoraMediaWrapper->muteRemoteVideoStream(lpData->uid, true);
+				m_pAgoraMediaWrapper->muteRemoteAudioStream(lpData->uid, true);
+
+				m_mapRemoteUserStatus[lpData->uid] = FALSE;
+			}
 		}
 
 		delete lpData; lpData = nullptr;
@@ -349,8 +359,28 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDUserOffline(WPARAM wParam, LPARAM l
 	return TRUE;
 }
 
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDMuteVideo(WPARAM wParam, LPARAM lParam)
+{
+	LPAGE_USER_MUTE_AUDIO lpData = (LPAGE_USER_MUTE_AUDIO)wParam;
+	if (lpData) {
+		
+		if (lpData->muted && lpData->uid == uSelectUID) {
+			m_btnRemoteAssistant.EnableWindow(TRUE);
+		}
+	}
+
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDMuteAudio(WPARAM wParam, LPARAM lParam)
+{
+	AfxMessageBox(_T(__FUNCTION__));
+	return TRUE;
+}
+
 LRESULT CScreenShareRemoteAssistantDlg::OnEIDConnectionLost(WPARAM wParam, LPARAM lParam)
 {
+	AfxMessageBox(_T(__FUNCTION__));
 	return TRUE;
 }
 
@@ -377,4 +407,15 @@ LRESULT CScreenShareRemoteAssistantDlg::OnStopRecordingService(WPARAM wParam, LP
 LRESULT CScreenShareRemoteAssistantDlg::OnApiCallExecuted(WPARAM wParam, LPARAM lParam)
 {
 	return TRUE;
+}
+
+
+void CScreenShareRemoteAssistantDlg::OnLbnDblclkListUserlist()
+{
+	// TODO: Add your control notification handler code here
+	int nCurSel = m_ltUserList.GetCurSel();
+	if (CB_ERR != nCurSel)
+		m_btnRemoteAssistant.EnableWindow(TRUE);
+	else
+		m_btnRemoteAssistant.EnableWindow(FALSE);
 }

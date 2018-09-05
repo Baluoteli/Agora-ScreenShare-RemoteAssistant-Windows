@@ -39,10 +39,10 @@
 #include "../MediaSDK/include/IAgoraRtcEngine2.h"
 using namespace agora::media;
 using namespace agora::rtc;
-
 #pragma comment(lib,"../MediaSDK/lib/agora_rtc_sdk.lib")
 
 #include "../SignalSDK/include/agora_sig.h"
+using namespace  agora_sdk_win;
 #pragma comment(lib,"../SignalSDK/lib/agora_sig_sdk.lib")
 
 #pragma warning(disable:4244)
@@ -62,6 +62,7 @@ using namespace AgoraSdkCWrapperUtilc;
 using namespace AgoraMediaParamDef;
 
 #include "SignalDef.h"
+using namespace  AgoraSignleParamDef;
 
 
 #ifdef _UNICODE

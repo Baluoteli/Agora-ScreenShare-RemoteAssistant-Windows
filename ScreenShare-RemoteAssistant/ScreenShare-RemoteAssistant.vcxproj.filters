@@ -73,7 +73,10 @@
       <Filter>AgoraSignal</Filter>
     </ClInclude>
     <ClInclude Include="RemoteAssistantDlg.h">
-      <Filter>Header Files</Filter>
+      <Filter>Dlg</Filter>
+    </ClInclude>
+    <ClInclude Include="AGSignalCallBack.h">
+      <Filter>AgoraSignal</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -99,7 +102,10 @@
       <Filter>AgoraMedia</Filter>
     </ClCompile>
     <ClCompile Include="RemoteAssistantDlg.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Dlg</Filter>
+    </ClCompile>
+    <ClCompile Include="AGSignalCallBack.cpp">
+      <Filter>AgoraSignal</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
