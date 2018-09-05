@@ -24,6 +24,7 @@ protected:
 
 	DECLARE_MESSAGE_MAP()
 
+	
 	afx_msg HRESULT onLoginSuccess(WPARAM wParam, LPARAM lParam);
 	afx_msg HRESULT onLogout(WPARAM wParam, LPARAM lParam);
 	afx_msg HRESULT onLogFailed(WPARAM wParam, LPARAM lParam);
@@ -39,6 +40,7 @@ protected:
 	afx_msg HRESULT onChannelJoined(WPARAM wParam, LPARAM lParam);
 	afx_msg HRESULT onChannelJoinFailed(WPARAM wParam, LPARAM lParam);
 	afx_msg HRESULT onChannelLeaved(WPARAM wParam, LPARAM lParam);
+	
 
 protected:
 	void initCtrl();

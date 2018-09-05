@@ -63,8 +63,12 @@ BOOL CRemoteAssistantDlg::OnInitDialog()
 	//MoveWindow(0, 0, m_nScreenW, m_nScreenH);
 	m_penFrame.CreatePen(PS_SOLID, 4, RGB(0x00, 0xA0, 0xE9));
 
-	initCtrl();
-	initSignalResource();
+	m_pMediaWrapper = CAgoraMediaWrapper::getInstance();
+	if (m_pMediaWrapper) {
+		m_pMediaWrapper->setRemoteVideo(m_hWnd, m_uRemoteID);
+	}
+	
+	m_pSignalWrapper = CAgoraSignalWrapper::getInstance();
 
 	return TRUE;
 }
@@ -76,25 +80,10 @@ void CRemoteAssistantDlg::initCtrl()
 
 void CRemoteAssistantDlg::initSignalResource()
 {
-	m_pMediaWrapper = CAgoraMediaWrapper::getInstance();
-	if (m_pMediaWrapper) {
-		m_pMediaWrapper->setRemoteVideo(m_hWnd, m_uRemoteID);
-	}
-	m_pSignalWrapper = CAgoraSignalWrapper::getInstance();
-	m_pSignalWrapper->setCallBackWnd(m_hWnd);
-	m_strAppId = CAgoraConfig::getInstance()->getAppId();
-	m_strAccount = CAgoraConfig::getInstance()->getLoginUID();
-
-	m_pSignalWrapper->setChannelKey("_no_need_token");
-	m_pSignalWrapper->Login(m_strAccount);
-
-	m_pSignalWrapper->sendInstantMsg(CAgoraWrapperUtilc::int2str(m_uRemoteID), "_no_need_token");
 }
 
 void CRemoteAssistantDlg::uninitResource()
 {
-	m_pSignalWrapper->LeaveChannel();
-	m_pSignalWrapper->LogOut();
 }
 
 int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)

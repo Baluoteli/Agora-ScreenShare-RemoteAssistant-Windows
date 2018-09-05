@@ -53,6 +53,7 @@ using namespace  agora_sdk_win;
 #include <iostream>
 #include <vector>
 #include <map>
+#include <list>
 
 #include "AgoraUitlc.h"
 using namespace AgoraSdkCWrapperUtilc;
