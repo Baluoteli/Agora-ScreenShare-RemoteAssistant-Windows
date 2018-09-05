@@ -287,9 +287,9 @@ namespace AgoraSdkCWrapperUtilc
 			return strLine;
 		}
 
-	protected:
+	public:
 
-		bool CFileIO::generatorFile(const std::string &path)
+		static bool CFileIO::generatorFile(const std::string &path)
 		{
 			HANDLE fileHandle = CreateFile(CString(path.c_str()),
 				GENERIC_READ | GENERIC_READ,
@@ -314,16 +314,101 @@ namespace AgoraSdkCWrapperUtilc
 	class CFileIni
 	{
 	public:
-		CFileIni();
-		CFileIni(const std::string &filePath);
-		~CFileIni();
+		CFileIni() :isValid_(false){ ; }
+		CFileIni(const std::string &filePath) {
+			iniFile_ = filePath;
+			CFileIO::generatorFile(filePath);
+		}
+		~CFileIni() {
+			isValid_ = false;
+		}
 
-		bool openFile(const std::string &IniFile);
-		bool write(const std::string &section, const std::string &key, const std::string &Value);
-		std::string read(const std::string &section, const std::string &key);
-		bool getSectionName(std::vector<std::string> &vecSection);
-		bool getSection(const std::string &section, std::map<std::string, std::string> &mapKeyValue);
-		std::string getFilePah();
+		bool openFile(const std::string &IniFile) {
+			iniFile_ = IniFile;
+			return isValid_ = CFileIO::generatorFile(IniFile);
+		}
+
+		bool write(const std::string &section, const std::string &key, const std::string &Value) {
+			assert(isValid_);
+			return (bool)(WritePrivateProfileString(CAgoraWrapperUtilc::s2cs(section), CAgoraWrapperUtilc::s2cs(key), CAgoraWrapperUtilc::s2cs(Value), CAgoraWrapperUtilc::s2cs(iniFile_)));
+		}
+
+		std::string read(const std::string &section, const std::string &key) {
+			assert(isValid_);
+			std::string Value;
+			TCHAR returnStr[MAX_DEVICE_ID_LENGTH] = { 0 };
+			GetPrivateProfileString(CAgoraWrapperUtilc::s2cs(section), CAgoraWrapperUtilc::s2cs(key), _T(""), returnStr, MAX_DEVICE_ID_LENGTH, CAgoraWrapperUtilc::s2cs(iniFile_));
+			Value = CAgoraWrapperUtilc::cs2s(returnStr);
+			return Value;
+		}
+
+		bool getSectionName(std::vector<std::string> &vecSection) {
+			assert(isValid_);
+			TCHAR returnStr[MAX_DEVICE_ID_LENGTH] = { 0 }; std::string sectionItem;
+			DWORD retNum = GetPrivateProfileSectionNames(returnStr, MAX_DEVICE_ID_LENGTH, CAgoraWrapperUtilc::s2cs(iniFile_));
+			if (0 < retNum)
+			{
+				int strLen = retNum;
+				int nIndex = 0; TCHAR tchTemp = '\0';
+				while (nIndex < strLen)
+				{
+					if ('\0' != (tchTemp = returnStr[nIndex]))
+					{
+						sectionItem += (tchTemp);
+					}
+					else
+					{
+						vecSection.push_back(sectionItem);
+						sectionItem.clear();
+					}
+					nIndex++;
+				}
+			}
+			return retNum > 0;
+		}
+
+		bool getSection(const std::string &section, std::map<std::string, std::string> &mapKeyValue) {
+			assert(isValid_);
+			TCHAR returnStr[MAX_DEVICE_ID_LENGTH] = { 0 }; std::string key; std::string value; bool isKey = true;
+			DWORD retNum = GetPrivateProfileSection(CAgoraWrapperUtilc::s2cs(section), returnStr, MAX_DEVICE_ID_LENGTH, CAgoraWrapperUtilc::s2cs(iniFile_));
+			if (0 < retNum)
+			{
+				int strLen = retNum;
+				int nIndex = 0; TCHAR tchTemp = '\0';
+				while (nIndex < strLen)
+				{
+					if ('\0' != (tchTemp = returnStr[nIndex]))
+					{
+						if (L'=' == tchTemp)
+						{
+							isKey = false;
+							nIndex++;
+							continue;
+						}
+						if (isKey)
+						{
+							key += (tchTemp);
+						}
+						else
+						{
+							value += (tchTemp);
+						}
+					}
+					else
+					{
+						mapKeyValue.insert(make_pair(key, value));
+						key.clear(); value.clear();
+						isKey = true;
+					}
+					nIndex++;
+				}
+			}
+			return retNum > 0;
+		}
+
+		std::string getFilePah() {
+			return iniFile_;
+		}
 
 	private:
 		std::string iniFile_;
@@ -333,9 +418,21 @@ namespace AgoraSdkCWrapperUtilc
 	class CIniBase
 	{
 	public:
-		CIniBase(const std::string &filePath);
-		virtual ~CIniBase();
-		std::string getFilePah();
+		CIniBase(const std::string &filePath) :pIniInstance_(nullptr) {
+			pIniInstance_ = new CFileIni(filePath);
+			assert(pIniInstance_);
+		}
+
+		virtual ~CIniBase() {
+			if (pIniInstance_) {
+				delete pIniInstance_;
+				pIniInstance_ = nullptr;
+			}
+		}
+
+		std::string getFilePah() {
+			return pIniInstance_->getFilePah();
+		}
 
 #define __DECLARE_INICONFIG_FUN(CMDID)\
 		std::string get##CMDID();\

@@ -63,6 +63,18 @@
     <ClInclude Include="AgoraConfig.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="AGEngineEventHandler.h">
+      <Filter>AgoraMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="MediaDef.h">
+      <Filter>AgoraMedia</Filter>
+    </ClInclude>
+    <ClInclude Include="SignalDef.h">
+      <Filter>AgoraSignal</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoteAssistantDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScreenShare-RemoteAssistant.cpp">
@@ -82,6 +94,12 @@
     </ClCompile>
     <ClCompile Include="AgoraConfig.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="AGEngineEventHandler.cpp">
+      <Filter>AgoraMedia</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoteAssistantDlg.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -12,6 +12,11 @@
 #endif
 
 
+#include "AgoraConfig.h"
+#include "AgoraMediaWrapper.h"
+#include "AgoraSignalWrapper.h"
+#include "AGEngineEventHandler.h"
+#include "RemoteAssistantDlg.h"
 // CAboutDlg dialog used for App About
 
 class CAboutDlg : public CDialogEx
@@ -48,7 +53,10 @@ END_MESSAGE_MAP()
 
 
 CScreenShareRemoteAssistantDlg::CScreenShareRemoteAssistantDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CScreenShareRemoteAssistantDlg::IDD, pParent)
+	: CDialogEx(CScreenShareRemoteAssistantDlg::IDD, pParent),
+	m_pAgoraMediaWrapper(nullptr),
+	m_pAgoraConfig(nullptr),
+	m_hScreenWnd(nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -61,6 +69,7 @@ void CScreenShareRemoteAssistantDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_BUTTON_JOIN, m_btnJoin);
 	DDX_Control(pDX, IDC_BUTTON_LEAVE, m_btnLeave);
 	DDX_Control(pDX, IDC_BUTTON_REMOTE_ASSISTANT, m_btnRemoteAssistant);
+	DDX_Control(pDX, IDC_LIST_UserList, m_ltUserList);
 }
 
 BEGIN_MESSAGE_MAP(CScreenShareRemoteAssistantDlg, CDialogEx)
@@ -70,6 +79,15 @@ BEGIN_MESSAGE_MAP(CScreenShareRemoteAssistantDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_JOIN, &CScreenShareRemoteAssistantDlg::OnBnClickedButtonJoin)
 	ON_BN_CLICKED(IDC_BUTTON_LEAVE, &CScreenShareRemoteAssistantDlg::OnBnClickedButtonLeave)
 	ON_BN_CLICKED(IDC_BUTTON_REMOTE_ASSISTANT, &CScreenShareRemoteAssistantDlg::OnBnClickedButtonRemoteAssistant)
+	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CScreenShareRemoteAssistantDlg::OnEIDJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_REJOINCHANNEL_SUCCESS), &CScreenShareRemoteAssistantDlg::OnEIDReJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_FIRST_LOCAL_VIDEO_FRAME), &CScreenShareRemoteAssistantDlg::OnEIDFirstLocalFrame)
+	ON_MESSAGE(WM_MSGID(EID_FIRST_REMOTE_VIDEO_DECODED), &CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded)
+	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CScreenShareRemoteAssistantDlg::OnEIDUserJoined)
+	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CScreenShareRemoteAssistantDlg::OnEIDUserOffline)
+	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STAT), &CScreenShareRemoteAssistantDlg::OnRemoteVideoStat)
+	ON_MESSAGE(WM_MSGID(EID_START_RCDSRV), &CScreenShareRemoteAssistantDlg::OnStartRecordingService)
+	ON_MESSAGE(WM_MSGID(EID_STOP_RCDSRV), &CScreenShareRemoteAssistantDlg::OnStopRecordingService)
 END_MESSAGE_MAP()
 
 
@@ -104,7 +122,17 @@ BOOL CScreenShareRemoteAssistantDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// Set big icon
 	SetIcon(m_hIcon, FALSE);		// Set small icon
 
-	// TODO: Add extra initialization here
+	// TODO: Add extra initialization here	
+	std::string strAppId = CAgoraConfig::getInstance()->getAppId();
+	if ("" == strAppId) {
+		AfxMessageBox(L"AppId is empty, please input .");
+		PostQuitMessage(0);
+		return FALSE;
+	}
+
+	initCtrl();
+	initMediaResource();
+	initSignalResource();
 
 	return TRUE;  // return TRUE  unless you set the focus to a control
 }
@@ -158,16 +186,21 @@ HCURSOR CScreenShareRemoteAssistantDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
-
 void CScreenShareRemoteAssistantDlg::initCtrl()
 {
+	std::string strChannelName = CAgoraConfig::getInstance()->getChannelName();
+	m_editChannelName.SetWindowTextW(CAgoraWrapperUtilc::s2cs(strChannelName));
 
+	std::string strLoginUID = CAgoraConfig::getInstance()->getLoginUID();
+	m_editUID.SetWindowTextW(CAgoraWrapperUtilc::s2cs(strLoginUID));
+
+	m_pAgoraConfig = CAgoraConfig::getInstance();
 }
 
 void CScreenShareRemoteAssistantDlg::initMediaResource()
 {
-
+	m_pAgoraMediaWrapper = CAgoraMediaWrapper::getInstance();
+	m_pAgoraMediaWrapper->getEngineEventHandle()->SetMsgReceiver(m_hWnd);
 }
 
 void CScreenShareRemoteAssistantDlg::initSignalResource()
@@ -183,16 +216,165 @@ void CScreenShareRemoteAssistantDlg::uninitResource()
 void CScreenShareRemoteAssistantDlg::OnBnClickedButtonJoin()
 {
 	// TODO: Add your control notification handler code here
-}
+	m_pAgoraMediaWrapper->EnableSDKVideoCapture(FALSE);
+	m_pAgoraMediaWrapper->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
+	UINT uid  = CAgoraWrapperUtilc::str2int(m_pAgoraConfig->getLoginUID());
+	//m_pAgoraMediaWrapper->setLocalVideo(m_hWnd,uid);
 
+	m_pAgoraMediaWrapper->enableVideo(TRUE);
+	m_pAgoraMediaWrapper->enableAudio(TRUE);
+
+	//m_pAgoraMediaWrapper->muteAllRemoteAudioStreams(TRUE);
+	//m_pAgoraMediaWrapper->muteAllRemoteVideoStreams(TRUE);
+
+	m_pAgoraMediaWrapper->setVideoProfile(VIDEO_PROFILE_TYPE::VIDEO_PROFILE_480P_10, FALSE);
+	m_pAgoraMediaWrapper->setClientRole(CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER,NULL);
+
+	m_pAgoraMediaWrapper->getRtcEngine()->startPreview();
+
+	std::string strChannelName = m_pAgoraConfig->getChannelName();
+	m_pAgoraMediaWrapper->JoinChannel(NULL, strChannelName.data(), NULL, uid);
+
+	HWND hMarkWnd = ::GetDesktopWindow();
+	m_pAgoraMediaWrapper->EnableScreenCapture(hMarkWnd);
+}
 
 void CScreenShareRemoteAssistantDlg::OnBnClickedButtonLeave()
 {
 	// TODO: Add your control notification handler code here
+
+	if (m_pAgoraMediaWrapper) {
+		
+		m_pAgoraMediaWrapper->leaveChannel();
+		m_pAgoraMediaWrapper->getRtcEngine()->stopPreview();
+		UINT uid = CAgoraWrapperUtilc::str2int(m_pAgoraConfig->getLoginUID());
+		m_pAgoraMediaWrapper->setLocalVideo(NULL, uid);
+		m_pAgoraMediaWrapper->EnableScreenCapture(NULL, 15, NULL, FALSE);
+	}
 }
 
 
 void CScreenShareRemoteAssistantDlg::OnBnClickedButtonRemoteAssistant()
 {
 	// TODO: Add your control notification handler code here
+
+	CString strSelectText;
+	int nCurSel = m_ltUserList.GetCurSel();
+	m_ltUserList.GetText(nCurSel, strSelectText);
+	static UINT uSelectUID = 0;
+	UINT uRemoteID = CAgoraWrapperUtilc::str2int(CAgoraWrapperUtilc::cs2s(strSelectText));
+
+	std::map<UINT, BOOL>::iterator it = m_mapRemoteUserStatus.find(uRemoteID);
+	if (m_mapRemoteUserStatus.end() != it) {
+
+		if (uSelectUID != uRemoteID && uSelectUID != 0) {
+			m_pAgoraMediaWrapper->muteRemoteAudioStream(uSelectUID, true);
+			m_pAgoraMediaWrapper->muteRemoteVideoStream(uSelectUID, true);
+			m_pAgoraMediaWrapper->muteRemoteVideoStream(uRemoteID, false);
+			m_pAgoraMediaWrapper->muteRemoteAudioStream(uRemoteID, false);
+		}
+		else if (uSelectUID == 0) {
+			m_pAgoraMediaWrapper->muteRemoteVideoStream(uRemoteID, false);
+			m_pAgoraMediaWrapper->muteRemoteAudioStream(uRemoteID, false);
+		}
+		else
+			AfxMessageBox(L"Already Remote Assisting..please Switch Remote User.");
+	}
+
+	if (uSelectUID != uRemoteID)
+		uSelectUID = uRemoteID;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDReJoinChannelSuccess(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDFirstLocalFrame(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded(WPARAM wParam, LPARAM lParam)
+{
+	LPAGE_FIRST_REMOTE_VIDEO_DECODED lpData = (LPAGE_FIRST_REMOTE_VIDEO_DECODED)wParam;
+	if (lpData) {
+		
+		CRemoteAssistantDlg DlgRemoteAssistant(lpData->uid);
+		INT_PTR nResponse = DlgRemoteAssistant.DoModal();
+		if (IDOK == nResponse) {
+
+		}
+		else if (IDCANCEL == nResponse) {
+			//Notify MainWnd RemoteAssistant Finished..
+
+		}
+
+		delete lpData; lpData = nullptr;
+
+
+	}
+
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lParam)
+{
+	LPAGE_USER_JOINED lpData = (LPAGE_USER_JOINED)wParam;
+	if (lpData) {
+
+		CString strRemoteID = CAgoraWrapperUtilc::s2cs(CAgoraWrapperUtilc::int2str(lpData->uid));
+		m_ltUserList.AddString(strRemoteID);
+
+		if (m_pAgoraMediaWrapper) {
+			m_pAgoraMediaWrapper->muteRemoteVideoStream(lpData->uid, true);
+			m_pAgoraMediaWrapper->muteRemoteAudioStream(lpData->uid, true);
+
+			m_mapRemoteUserStatus[lpData->uid] = FALSE;
+		}
+
+		delete lpData; lpData = nullptr;
+	}
+
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDConnectionLost(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnEIDVideoDeviceChanged(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnRemoteVideoStat(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+			   
+LRESULT CScreenShareRemoteAssistantDlg::OnStartRecordingService(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnStopRecordingService(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
+}
+
+LRESULT CScreenShareRemoteAssistantDlg::OnApiCallExecuted(WPARAM wParam, LPARAM lParam)
+{
+	return TRUE;
 }

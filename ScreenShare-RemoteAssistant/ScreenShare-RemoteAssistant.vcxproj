@@ -101,21 +101,27 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AGEngineEventHandler.h" />
     <ClInclude Include="AgoraConfig.h" />
     <ClInclude Include="AgoraMediaWrapper.h" />
     <ClInclude Include="AgoraSignalWrapper.h" />
     <ClInclude Include="AgoraSingletonTemplate.h" />
     <ClInclude Include="AgoraUitlc.h" />
+    <ClInclude Include="MediaDef.h" />
+    <ClInclude Include="RemoteAssistantDlg.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScreenShare-RemoteAssistant.h" />
     <ClInclude Include="ScreenShare-RemoteAssistantDlg.h" />
+    <ClInclude Include="SignalDef.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AGEngineEventHandler.cpp" />
     <ClCompile Include="AgoraConfig.cpp" />
     <ClCompile Include="AgoraMediaWrapper.cpp" />
     <ClCompile Include="AgoraSignalWrapper.cpp" />
+    <ClCompile Include="RemoteAssistantDlg.cpp" />
     <ClCompile Include="ScreenShare-RemoteAssistant.cpp" />
     <ClCompile Include="ScreenShare-RemoteAssistantDlg.cpp" />
     <ClCompile Include="stdafx.cpp">

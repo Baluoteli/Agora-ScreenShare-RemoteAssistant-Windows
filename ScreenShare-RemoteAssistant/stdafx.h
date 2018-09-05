@@ -37,6 +37,7 @@
 
 #include "../MediaSDK/include/IAgoraMediaEngine.h"
 #include "../MediaSDK/include/IAgoraRtcEngine2.h"
+using namespace agora::media;
 using namespace agora::rtc;
 
 #pragma comment(lib,"../MediaSDK/lib/agora_rtc_sdk.lib")
@@ -45,6 +46,9 @@ using namespace agora::rtc;
 #pragma comment(lib,"../SignalSDK/lib/agora_sig_sdk.lib")
 
 #pragma warning(disable:4244)
+#pragma warning(disable:4800)
+#pragma warning(disable:4172)
+#pragma warning(disable:4715)
 
 #include <iostream>
 #include <vector>
@@ -54,6 +58,10 @@ using namespace agora::rtc;
 using namespace AgoraSdkCWrapperUtilc;
 #include "AgoraSingletonTemplate.h"
 
+#include "MediaDef.h"
+using namespace AgoraMediaParamDef;
+
+#include "SignalDef.h"
 
 
 #ifdef _UNICODE
