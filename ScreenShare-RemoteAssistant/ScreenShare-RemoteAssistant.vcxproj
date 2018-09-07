@@ -110,6 +110,7 @@
     <ClInclude Include="AGSignalCallBack.h" />
     <ClInclude Include="MediaDef.h" />
     <ClInclude Include="RemoteAssistantDlg.h" />
+    <ClInclude Include="RemoteAssistantTransfer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ScreenShare-RemoteAssistant.h" />
     <ClInclude Include="ScreenShare-RemoteAssistantDlg.h" />
@@ -124,6 +125,7 @@
     <ClCompile Include="AGSignalCallBack.cpp" />
     <ClCompile Include="AgoraSignalWrapper.cpp" />
     <ClCompile Include="RemoteAssistantDlg.cpp" />
+    <ClCompile Include="RemoteAssistantTransfer.cpp" />
     <ClCompile Include="ScreenShare-RemoteAssistant.cpp" />
     <ClCompile Include="ScreenShare-RemoteAssistantDlg.cpp" />
     <ClCompile Include="stdafx.cpp">

@@ -78,6 +78,9 @@
     <ClInclude Include="AGSignalCallBack.h">
       <Filter>AgoraSignal</Filter>
     </ClInclude>
+    <ClInclude Include="RemoteAssistantTransfer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScreenShare-RemoteAssistant.cpp">
@@ -106,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="AGSignalCallBack.cpp">
       <Filter>AgoraSignal</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoteAssistantTransfer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
