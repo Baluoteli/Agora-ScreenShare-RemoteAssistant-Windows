@@ -28,6 +28,9 @@
     <Filter Include="Dlg">
       <UniqueIdentifier>{3bae5979-b306-4c6c-ab08-38807d9b168f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="JsonObject">
+      <UniqueIdentifier>{3cae82d1-26a1-4775-8ae4-3689124d4ebf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -81,6 +84,12 @@
     <ClInclude Include="RemoteAssistantTransfer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="JsonObject\cJSON.h">
+      <Filter>JsonObject</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonObject\CJsonObject.h">
+      <Filter>JsonObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ScreenShare-RemoteAssistant.cpp">
@@ -112,6 +121,12 @@
     </ClCompile>
     <ClCompile Include="RemoteAssistantTransfer.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonObject\cJSON.c">
+      <Filter>JsonObject</Filter>
+    </ClCompile>
+    <ClCompile Include="JsonObject\CJsonObject.cpp">
+      <Filter>JsonObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

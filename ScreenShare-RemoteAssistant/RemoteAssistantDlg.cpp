@@ -36,6 +36,7 @@ void CRemoteAssistantDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CRemoteAssistantDlg, CDialogEx)
 	ON_WM_PAINT()
+	ON_WM_CLOSE()
 	ON_MESSAGE(WM_LoginSuccess,onLoginSuccess)
 	ON_MESSAGE(WM_LoginFailed,onLogFailed)
 	ON_MESSAGE(WM_LogOut,onLogout)
@@ -67,8 +68,12 @@ BOOL CRemoteAssistantDlg::OnInitDialog()
 	if (m_pMediaWrapper) {
 		m_pMediaWrapper->setRemoteVideo(m_hWnd, m_uRemoteID);
 	}
-	
-	m_pSignalWrapper = CAgoraSignalWrapper::getInstance();
+
+	initCtrl();
+	initSignalResource();
+
+
+
 
 	return TRUE;
 }
@@ -80,6 +85,7 @@ void CRemoteAssistantDlg::initCtrl()
 
 void CRemoteAssistantDlg::initSignalResource()
 {
+	m_AgoraRemoteTransfer.start();
 }
 
 void CRemoteAssistantDlg::uninitResource()
@@ -96,17 +102,127 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 
 		switch (pMsg->message)
 		{
-		case WM_LBUTTONDBLCLK:break;
-		case WM_LBUTTONDOWN:break;
-		case WM_LBUTTONUP:break;
-		case WM_RBUTTONDBLCLK:break;
-		case WM_RBUTTONUP: break;
-		case WM_RBUTTONDOWN:break;
-		case WM_CHAR:break;
+		case WM_LBUTTONDBLCLK:
+		{
+			CPoint pt;
+			int nXpos = GET_X_LPARAM(pMsg->lParam);
+			int nYpos = GET_Y_LPARAM(pMsg->lParam);
+			pt.SetPoint(nXpos, nYpos);
+			
+			m_AgoraRemoteTransfer.mouse_LBtnDClick(pt);
+		}
+			break;
+		case WM_LBUTTONDOWN:
+		{
+			CPoint pt;
+			int nXpos = GET_X_LPARAM(pMsg->lParam);
+			int nYpos = GET_Y_LPARAM(pMsg->lParam);
+			pt.SetPoint(nXpos, nYpos);
+
+			m_AgoraRemoteTransfer.mouse_LBtnDown(pt);
+		}
+			break;
+		case WM_LBUTTONUP:
+		{
+			CPoint pt;
+			int nXpos = GET_X_LPARAM(pMsg->lParam);
+			int nYpos = GET_Y_LPARAM(pMsg->lParam);
+			pt.SetPoint(nXpos, nYpos);
+
+			m_AgoraRemoteTransfer.mouse_LBtnUp(pt);
+		}
+			break;
+		case WM_RBUTTONDBLCLK:
+		{
+			CPoint pt;
+			int nXpos = GET_X_LPARAM(pMsg->lParam);
+			int nYpos = GET_Y_LPARAM(pMsg->lParam);
+			pt.SetPoint(nXpos, nYpos);
+
+			m_AgoraRemoteTransfer.mouse_RBtnDClick(pt);
+		}
+			break;
+		case WM_RBUTTONUP: 
+		{
+			CPoint pt;
+			int nXpos = GET_X_LPARAM(pMsg->lParam);
+			int nYpos = GET_Y_LPARAM(pMsg->lParam);
+			pt.SetPoint(nXpos, nYpos);
+
+			m_AgoraRemoteTransfer.mouse_RBtnUp(pt);
+		}
+			break;
+		case WM_RBUTTONDOWN:
+		{
+			CPoint pt;
+			int nXpos = GET_X_LPARAM(pMsg->lParam);
+			int nYpos = GET_Y_LPARAM(pMsg->lParam);
+			pt.SetPoint(nXpos, nYpos);
+
+			m_AgoraRemoteTransfer.mouse_RBtnDown(pt);
+		}
+			break;
+		case WM_MOUSEMOVE:
+		{
+			CPoint pt;
+			int nXpos = GET_X_LPARAM(pMsg->lParam);
+			int nYpos = GET_Y_LPARAM(pMsg->lParam);
+			pt.SetPoint(nXpos, nYpos);
+
+			m_AgoraRemoteTransfer.mouse_Move(pt);
+		}
+			break;
+		case WM_CHAR:
+		{
+			char ch = pMsg->wParam;
+			
+		}
+			break;
+		case WM_KEYDOWN:
+		{
+			static bool bCtrlKey = false;
+			switch (pMsg->wParam)
+			{
+			case VK_F1:
+			case VK_F2:
+			case VK_F3:
+			case VK_F4:
+			case VK_F5:
+			case VK_F6:
+			case VK_F7:
+			case VK_F8:
+			case VK_F9:
+			case VK_F10:
+			case VK_F11:
+			case VK_F12:
+			{
+
+			}
+			break;
+			case VK_BACK:
+			case VK_RETURN:
+			case VK_SPACE:
+			case VK_TAB:
+			case VK_ESCAPE:
+			{
+
+			}
+				break;
+			case VK_CONTROL:
+				break;
+			case VK_SHIFT:
+				break;
+			default:
+				break;
+			}
+		}
+			break;
+		default:break;
 		}
 	}
 	
-	return CDialogEx::PreTranslateMessage(pMsg);
+	//return CDialogEx::PreTranslateMessage(pMsg);
+	return FALSE;
 }
 
 void CRemoteAssistantDlg::OnPaint()
@@ -127,6 +243,12 @@ void CRemoteAssistantDlg::OnPaint()
 	::BitBlt(dc, 0, 0, rt.right, rt.bottom, dcMem, 0, 0, SRCCOPY);
 
 	//dc.SelectObject(defPen);
+}
+
+void CRemoteAssistantDlg::OnClose()
+{
+	m_AgoraRemoteTransfer.stop();
+	CDialogEx::OnCancel();
 }
 
 HRESULT CRemoteAssistantDlg::onLoginSuccess(WPARAM wParam, LPARAM lParam)

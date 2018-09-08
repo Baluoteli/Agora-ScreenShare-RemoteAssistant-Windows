@@ -85,6 +85,7 @@ BEGIN_MESSAGE_MAP(CScreenShareRemoteAssistantDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_REMOTE_ASSISTANT, &CScreenShareRemoteAssistantDlg::OnBnClickedButtonRemoteAssistant)
 	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CScreenShareRemoteAssistantDlg::OnEIDJoinChannelSuccess)
 	ON_MESSAGE(WM_MSGID(EID_REJOINCHANNEL_SUCCESS), &CScreenShareRemoteAssistantDlg::OnEIDReJoinChannelSuccess)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL),CScreenShareRemoteAssistantDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_FIRST_LOCAL_VIDEO_FRAME), &CScreenShareRemoteAssistantDlg::OnEIDFirstLocalFrame)
 	ON_MESSAGE(WM_MSGID(EID_FIRST_REMOTE_VIDEO_DECODED), &CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CScreenShareRemoteAssistantDlg::OnEIDUserJoined)
@@ -149,6 +150,38 @@ BOOL CScreenShareRemoteAssistantDlg::OnInitDialog()
 		PostQuitMessage(0);
 		return FALSE;
 	}
+
+	//to do
+#if 0
+
+	time_t ltime;
+	time(&ltime);
+	int lasttime = ltime;
+	Sleep(2000);
+	time(&ltime);
+	int nexttime = ltime;
+
+	SYSTEMTIME st, st1;
+	GetSystemTime(&st);
+	Sleep(1223);
+	GetSystemTime(&st1);
+
+	CJsonObject object;
+	object.Add("nCmdType", 1024);
+	GetLocalTime(&st);
+	char szbuf[MAX_PATH] = { '\0' };
+	sprintf_s(szbuf, "%d:%d:%d:%d", st.wHour, st.wMinute, st.wMinute, st.wMilliseconds);
+	object.Add("sTimtStamp", szbuf);
+	object.AddEmptySubObject("EventParam");
+	object["EventParam"].AddEmptySubObject("point");
+	object["EventParam"]["point"].Add("xPos", 10);
+	object["EventParam"]["point"].Add("yPos", 10);
+
+	std::string str = object.ToString();
+	str = object.ToFormattedString();
+
+#endif
+
 
 	initCtrl();
 	initMediaResource();

@@ -108,6 +108,8 @@
     <ClInclude Include="AgoraSingletonTemplate.h" />
     <ClInclude Include="AgoraUitlc.h" />
     <ClInclude Include="AGSignalCallBack.h" />
+    <ClInclude Include="JsonObject\cJSON.h" />
+    <ClInclude Include="JsonObject\CJsonObject.h" />
     <ClInclude Include="MediaDef.h" />
     <ClInclude Include="RemoteAssistantDlg.h" />
     <ClInclude Include="RemoteAssistantTransfer.h" />
@@ -124,6 +126,10 @@
     <ClCompile Include="AgoraMediaWrapper.cpp" />
     <ClCompile Include="AGSignalCallBack.cpp" />
     <ClCompile Include="AgoraSignalWrapper.cpp" />
+    <ClCompile Include="JsonObject\cJSON.c">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="JsonObject\CJsonObject.cpp" />
     <ClCompile Include="RemoteAssistantDlg.cpp" />
     <ClCompile Include="RemoteAssistantTransfer.cpp" />
     <ClCompile Include="ScreenShare-RemoteAssistant.cpp" />

@@ -4,6 +4,9 @@
 // CRemoteAssistantDlg dialog
 class CAgoraMediaWrapper;
 class CAgoraSignalWrapper;
+#include "RemoteAssistantTransfer.h"
+using namespace AgoraRemoteTransfer;
+
 class CRemoteAssistantDlg : public CDialogEx
 {
 	DECLARE_DYNAMIC(CRemoteAssistantDlg)
@@ -21,6 +24,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual BOOL PreTranslateMessage(MSG* pMsg);
 	void OnPaint();
+	void OnClose();
 
 	DECLARE_MESSAGE_MAP()
 
@@ -58,5 +62,5 @@ private:
 	std::string m_strAppId;
 
 	CAgoraMediaWrapper *m_pMediaWrapper;
-	CAgoraSignalWrapper *m_pSignalWrapper;
+	CAgoraRemoteTransfer m_AgoraRemoteTransfer;
 };

@@ -65,6 +65,9 @@ using namespace AgoraMediaParamDef;
 #include "SignalDef.h"
 using namespace  AgoraSignleParamDef;
 
+#include "./JsonObject/CJsonObject.h"
+using namespace neb;
+
 
 #ifdef _UNICODE
 #if defined _M_IX86
