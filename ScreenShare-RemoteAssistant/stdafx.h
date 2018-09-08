@@ -49,6 +49,7 @@ using namespace  agora_sdk_win;
 #pragma warning(disable:4800)
 #pragma warning(disable:4172)
 #pragma warning(disable:4715)
+#pragma warning(disable:4114)
 
 #include <iostream>
 #include <vector>

@@ -29,6 +29,9 @@ void CAgoraRemoteTransfer::setRemoteUID(const std::string &strUID)
 
 void CAgoraRemoteTransfer::start()
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_StartAssistant);
 	SYSTEMTIME st;
@@ -45,6 +48,9 @@ void CAgoraRemoteTransfer::start()
 
 void CAgoraRemoteTransfer::stop()
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_StopAssistant);
 	SYSTEMTIME st;
@@ -61,6 +67,9 @@ void CAgoraRemoteTransfer::stop()
 
 void CAgoraRemoteTransfer::mouse_LBtnDown(POINT pt)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_Mouse_LBtnDown);
 	SYSTEMTIME st;
@@ -79,6 +88,9 @@ void CAgoraRemoteTransfer::mouse_LBtnDown(POINT pt)
 
 void CAgoraRemoteTransfer::mouse_LBtnUp(POINT pt)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_Mouse_LBtnUp);
 	SYSTEMTIME st;
@@ -97,6 +109,9 @@ void CAgoraRemoteTransfer::mouse_LBtnUp(POINT pt)
 
 void CAgoraRemoteTransfer::mouse_LBtnDClick(POINT pt)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_Mouse_LBtnDClick);
 	SYSTEMTIME st;
@@ -115,6 +130,9 @@ void CAgoraRemoteTransfer::mouse_LBtnDClick(POINT pt)
 
 void CAgoraRemoteTransfer::mouse_RBtnDown(POINT pt)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_Mouse_RBtnDown);
 	SYSTEMTIME st;
@@ -133,6 +151,9 @@ void CAgoraRemoteTransfer::mouse_RBtnDown(POINT pt)
 
 void CAgoraRemoteTransfer::mouse_RBtnUp(POINT pt)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_Mouse_RBtnUp);
 	SYSTEMTIME st;
@@ -151,6 +172,9 @@ void CAgoraRemoteTransfer::mouse_RBtnUp(POINT pt)
 
 void CAgoraRemoteTransfer::mouse_RBtnDClick(POINT pt)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_Mouse_RBtnDClick);
 	SYSTEMTIME st;
@@ -169,6 +193,9 @@ void CAgoraRemoteTransfer::mouse_RBtnDClick(POINT pt)
 
 void CAgoraRemoteTransfer::mouse_Move(POINT pt)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_Mouse_Move);
 	SYSTEMTIME st;
@@ -187,6 +214,9 @@ void CAgoraRemoteTransfer::mouse_Move(POINT pt)
 
 void CAgoraRemoteTransfer::keyboard_charnum(int nNum)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_KeyBoard_CharNum);
 	SYSTEMTIME st;
@@ -203,6 +233,9 @@ void CAgoraRemoteTransfer::keyboard_charnum(int nNum)
 
 void CAgoraRemoteTransfer::keyboard_copy(const std::string &copycontext)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_KeyBoard_CharNum);
 	SYSTEMTIME st;
@@ -219,6 +252,9 @@ void CAgoraRemoteTransfer::keyboard_copy(const std::string &copycontext)
 
 void CAgoraRemoteTransfer::keyboard_paste(const std::string &pastecontext)
 {
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_KeyBoard_CharNum);
 	SYSTEMTIME st;

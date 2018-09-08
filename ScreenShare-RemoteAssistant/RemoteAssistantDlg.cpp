@@ -37,6 +37,12 @@ void CRemoteAssistantDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CRemoteAssistantDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_CLOSE()
+	ON_WM_LBUTTONDBLCLK()
+	ON_WM_LBUTTONDOWN()
+	ON_WM_RBUTTONDBLCLK()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_MOUSEMOVE()
+	ON_WM_KEYDOWN()
 	ON_MESSAGE(WM_LoginSuccess,onLoginSuccess)
 	ON_MESSAGE(WM_LoginFailed,onLogFailed)
 	ON_MESSAGE(WM_LogOut,onLogout)
@@ -63,6 +69,10 @@ BOOL CRemoteAssistantDlg::OnInitDialog()
 
 	//MoveWindow(0, 0, m_nScreenW, m_nScreenH);
 	m_penFrame.CreatePen(PS_SOLID, 4, RGB(0x00, 0xA0, 0xE9));
+	CRect rt;
+	GetClientRect(&rt);
+	ClientToScreen(&rt);
+	::SetWindowPos(m_hWnd,HWND_TOPMOST, rt.left, rt.top, rt.Width(), rt.Height(), SWP_SHOWWINDOW);
 
 	m_pMediaWrapper = CAgoraMediaWrapper::getInstance();
 	if (m_pMediaWrapper) {
@@ -71,9 +81,6 @@ BOOL CRemoteAssistantDlg::OnInitDialog()
 
 	initCtrl();
 	initSignalResource();
-
-
-
 
 	return TRUE;
 }
@@ -97,8 +104,8 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 	//Êó±ê: ×ó¼üµ¥»÷,×ó¼üË«»÷,ÓÒ¼üµ¥»÷,ÓÒ¼üË«»÷,ÍÏ¶¯.
 	//¼üÅÌ:Êý×Ö,×ÖÄ¸.
 	//¿ì½Ý¼ü:ctrl+c,ctrl+v
-
-	if (pMsg->hwnd == m_hWnd) {
+	static bool bCtrlKey = false;
+	if (pMsg->hwnd == m_hWnd && false) {
 
 		switch (pMsg->message)
 		{
@@ -174,13 +181,31 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			break;
 		case WM_CHAR:
 		{
-			char ch = pMsg->wParam;
-			
+// 			char ch = pMsg->wParam;
+// 			
+// 			if ('C' == ch || 'c' == ch)
+// 				m_AgoraRemoteTransfer.keyboard_copy("");
+// 			else if ('v' == ch || 'V' == ch)
+// 				m_AgoraRemoteTransfer.keyboard_paste("");
+// 			else
+// 				m_AgoraRemoteTransfer.keyboard_charnum(ch);
+// 			bCtrlKey = false;
 		}
 			break;
 		case WM_KEYDOWN:
 		{
-			static bool bCtrlKey = false;
+			UINT nKeyCode = pMsg->wParam;
+			if (GetKeyState(VK_CONTROL) & 0x8000)
+				if (nKeyCode == _T('C'))
+					m_AgoraRemoteTransfer.keyboard_copy("");
+				else if (_T('V') == nKeyCode)
+					m_AgoraRemoteTransfer.keyboard_paste("");
+
+			if (pMsg->wParam == 'V' && GetAsyncKeyState(VK_CONTROL)) {
+				 
+				int i = 0;
+			}
+
 			switch (pMsg->wParam)
 			{
 			case VK_F1:
@@ -195,21 +220,13 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			case VK_F10:
 			case VK_F11:
 			case VK_F12:
-			{
-
-			}
-			break;
+				break;
 			case VK_BACK:
 			case VK_RETURN:
 			case VK_SPACE:
 			case VK_TAB:
 			case VK_ESCAPE:
-			{
-
-			}
-				break;
 			case VK_CONTROL:
-				break;
 			case VK_SHIFT:
 				break;
 			default:
@@ -221,8 +238,7 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 		}
 	}
 	
-	//return CDialogEx::PreTranslateMessage(pMsg);
-	return FALSE;
+	return CDialogEx::PreTranslateMessage(pMsg);
 }
 
 void CRemoteAssistantDlg::OnPaint()
@@ -376,4 +392,45 @@ HRESULT CRemoteAssistantDlg::onChannelLeaved(WPARAM wParam, LPARAM lParam)
 		delete lpData; lpData = nullptr;
 	}
 	return TRUE;
+}
+
+
+void CRemoteAssistantDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+	m_AgoraRemoteTransfer.mouse_LBtnDClick(point);
+}
+
+void CRemoteAssistantDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	m_AgoraRemoteTransfer.mouse_LBtnDown(point);
+}
+
+void CRemoteAssistantDlg::OnRButtonDown(UINT nFlags, CPoint point)
+{
+	m_AgoraRemoteTransfer.mouse_RBtnDown(point);
+}
+
+void CRemoteAssistantDlg::OnRButtonDblClk(UINT nFlags, CPoint point)
+{
+	m_AgoraRemoteTransfer.mouse_RBtnDClick(point);
+}
+
+void CRemoteAssistantDlg::OnMouseMove(UINT nFlags, CPoint point)
+{
+	//m_AgoraRemoteTransfer.mouse_Move(point);
+	//OutputDebugString(_T(__FUNCTION__));
+	//OutputDebugString(_T("\n"));
+	m_AgoraRemoteTransfer.mouse_Move(point);
+}
+
+void CRemoteAssistantDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{	
+	if (('C' == nChar || 'c' == nChar) && ::GetKeyState(VK_CONTROL) & 0x8000) {
+		m_AgoraRemoteTransfer.keyboard_copy("");
+	}
+	else if (('V' == nChar || 'v' == nChar) && ::GetKeyState(VK_CONTROL) & 0x8000) {
+		m_AgoraRemoteTransfer.keyboard_paste("");
+	}
+	else
+		m_AgoraRemoteTransfer.keyboard_charnum(nChar);
 }
