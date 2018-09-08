@@ -597,6 +597,8 @@ HRESULT CScreenShareRemoteAssistantDlg::onMessageInstantReceive(WPARAM wParam, L
 		strFormat.Format(L"[%s] : %s",CAgoraWrapperUtilc::s2cs(lpData->msg),CAgoraWrapperUtilc::s2cs(lpData->msg));
 		m_ltSignalMsgInfo.AddString(strFormat);
 
+		parseMsg(lpData->msg);
+
 		delete lpData; lpData = nullptr;
 	}
 
@@ -607,6 +609,7 @@ HRESULT CScreenShareRemoteAssistantDlg::onMessageChannelReceive(WPARAM wParam, L
 {
 	PAG_SIGNAL_MESSAGECHANNELRECEIVE lpData = (PAG_SIGNAL_MESSAGECHANNELRECEIVE)wParam;
 	if (lpData) {
+		
 		delete lpData; lpData = nullptr;
 	}
 
@@ -639,4 +642,145 @@ HRESULT CScreenShareRemoteAssistantDlg::onChannelLeaved(WPARAM wParam, LPARAM lP
 		delete lpData; lpData = nullptr;
 	}
 	return TRUE;
+}
+
+
+void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
+{
+	CJsonObject jsonObject(msg);
+
+	UINT uCmdType;
+	if (jsonObject.Get("nCmdType", uCmdType)) {
+		int uTimeStamp = 0;
+		jsonObject.Get("nTimeStamp", uTimeStamp);
+
+		SYSTEMTIME st;
+		GetSystemTime(&st);
+		int lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
+		uTimeStamp = lTimeStamp - uTimeStamp;
+		TRACE("Interval : %d ms\n", uTimeStamp);
+
+		switch (uCmdType) {
+		case eTransfer_StartAssistant:{
+			notifyStart();
+		}
+			break;
+		case eTransfer_StopAssistant:
+			notifyStop();
+			break;
+		case eTransfer_Mouse_LBtnDown:{
+			int nXpos = 0;
+			int nYpos = 0;
+			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
+			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
+			CPoint pt(nXpos, nYpos);
+			notifyLbtnDown(pt);
+		}
+			break;
+		case eTransfer_Mouse_LBtnDClick:{
+			int nXpos = 0;
+			int nYpos = 0;
+			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
+			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
+			CPoint pt(nXpos, nYpos);
+			notifyLbtnDClick(pt);
+		}
+			break;
+		case eTransfer_Mouse_RBtnDown:{
+			int nXpos = 0;
+			int nYpos = 0;
+			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
+			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
+			CPoint pt(nXpos, nYpos);
+			notifyRbtnDown(pt);
+		}
+			break;
+		case eTransfer_Mouse_RBtnDClick:{
+			int nXpos = 0;
+			int nYpos = 0;
+			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
+			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
+			CPoint pt(nXpos, nYpos);
+			notifyRbtnDClick(pt);
+		}
+			break;
+		case eTransfer_Mouse_Move:{
+			int nXpos = 0;
+			int nYpos = 0;
+			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
+			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
+			CPoint pt(nXpos, nYpos);
+			notifyLbtnDown(pt);
+		}
+			break;
+		case eTransfer_KeyBoard_CharNum:{
+			int nNum;			
+			jsonObject["EventParam"].Get("input", nNum);
+			notifyChar((char)nNum);
+		}
+			break;
+		case eTransfer_KeyBoard_Copy:{
+			std::string strMsg;
+			jsonObject["EventParam"].Get("copyContent", strMsg);
+			notifyCopy(strMsg);
+		}
+			break;
+		case eTransfer_KeyBoard_Paste:{
+			std::string strMsg;
+			jsonObject["EventParam"].Get("pasteContent", strMsg);
+			notifyPaste(strMsg);
+		}
+			break;
+		}
+	}
+}
+
+void CScreenShareRemoteAssistantDlg::notifyLbtnDown(POINT &pt)
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyLbtnDClick(POINT &pt)
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyRbtnDown(POINT &pt)
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyRbtnDClick(POINT &pt)
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyMove(POINT &rt)
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyChar(char ch)
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyCopy(const std::string &msg)
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyPaste(const std::string &msg)
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyStart()
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+void CScreenShareRemoteAssistantDlg::notifyStop()
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 }

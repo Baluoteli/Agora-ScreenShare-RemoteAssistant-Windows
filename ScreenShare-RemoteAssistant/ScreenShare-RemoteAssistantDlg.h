@@ -71,10 +71,22 @@ protected:
 
 protected:
 
-	void initCtrl();
-	void initMediaResource();
-	void initSignalResource();
-	void uninitResource();
+	inline void initCtrl();
+	inline void initMediaResource();
+	inline void initSignalResource();
+	inline void uninitResource();
+
+	inline void parseMsg(const std::string &msg);
+	inline void notifyLbtnDown(POINT &pt);
+	inline void notifyLbtnDClick(POINT &pt);
+	inline void notifyRbtnDown(POINT &pt);
+	inline void notifyRbtnDClick(POINT &pt);
+	inline void notifyMove(POINT &rt);
+	inline void notifyChar(char ch);
+	inline void notifyCopy(const std::string &msg);
+	inline void notifyPaste(const std::string &msg);
+	inline void notifyStart();
+	inline void notifyStop();
 
 private:
 

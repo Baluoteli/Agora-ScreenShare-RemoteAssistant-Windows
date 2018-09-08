@@ -37,6 +37,8 @@ namespace AgoraRemoteTransfer {
 	const int const KVK_F1 = VK_F1;
 	const int const KVK_F12 = VK_F12;
 
+	//Remote Transfer Define
+
 
 	class CAgoraRemoteTransfer{
 
