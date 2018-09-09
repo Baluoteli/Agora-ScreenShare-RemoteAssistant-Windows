@@ -237,7 +237,7 @@ void CAgoraRemoteTransfer::keyboard_copy(const std::string &copycontext)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_KeyBoard_CharNum);
+	object.Add("nCmdType", eTransfer_KeyBoard_Copy);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
@@ -256,7 +256,7 @@ void CAgoraRemoteTransfer::keyboard_paste(const std::string &pastecontext)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_KeyBoard_CharNum);
+	object.Add("nCmdType", eTransfer_KeyBoard_Paste);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
