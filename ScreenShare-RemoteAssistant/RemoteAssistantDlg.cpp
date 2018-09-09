@@ -44,9 +44,11 @@ BEGIN_MESSAGE_MAP(CRemoteAssistantDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_CLOSE()
 	ON_WM_LBUTTONDBLCLK()
+	ON_WM_LBUTTONUP()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_RBUTTONDBLCLK()
 	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	ON_WM_KEYDOWN()
 	ON_MESSAGE(WM_LoginSuccess,onLoginSuccess)
@@ -417,12 +419,28 @@ void CRemoteAssistantDlg::OnLButtonDown(UINT nFlags, CPoint point)
 	m_AgoraRemoteTransfer.mouse_LBtnDown(ptRemote);
 }
 
+void CRemoteAssistantDlg::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	POINT ptRemote;
+	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
+	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
+	m_AgoraRemoteTransfer.mouse_LBtnUp(ptRemote);
+}
+
 void CRemoteAssistantDlg::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	POINT ptRemote;
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	m_AgoraRemoteTransfer.mouse_RBtnDown(ptRemote);
+}
+
+void CRemoteAssistantDlg::OnRButtonUp(UINT nFlags, CPoint point)
+{
+	POINT ptRemote;
+	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
+	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
+	m_AgoraRemoteTransfer.mouse_RBtnUp(ptRemote);
 }
 
 void CRemoteAssistantDlg::OnRButtonDblClk(UINT nFlags, CPoint point)

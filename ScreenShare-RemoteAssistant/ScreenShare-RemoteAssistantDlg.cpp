@@ -739,27 +739,47 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 void CScreenShareRemoteAssistantDlg::notifyLbtnDown(POINT &pt)
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+		mouse_event(MOUSEEVENTF_LEFTDOWN, pt.x, pt.y, 0, 0);
+}
+
+void CScreenShareRemoteAssistantDlg::notifyLbtnUp(POINT &pt)
+{
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	mouse_event(MOUSEEVENTF_LEFTUP, pt.x, pt.y, 0, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyLbtnDClick(POINT &pt)
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+		mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, pt.x, pt.y, 0, 0);
+		mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, pt.x, pt.y, 0, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyRbtnDown(POINT &pt)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	mouse_event(MOUSEEVENTF_RIGHTDOWN, pt.x, pt.y, 0, 0);
 }
+
+void CScreenShareRemoteAssistantDlg::notifyRbtnUp(POINT &pt)
+{
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	mouse_event(MOUSEEVENTF_RIGHTUP, pt.x, pt.y, 0, 0);
+}
+
 
 void CScreenShareRemoteAssistantDlg::notifyRbtnDClick(POINT &pt)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, pt.x, pt.y, 0, 0);
+	mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, pt.x, pt.y, 0, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyMove(POINT &rt)
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 
+#if 1
 		POSITION	pos = m_listWnd.GetHeadPosition();
 		CRect		rcMarkWnd;
 		HWND		hMarkWnd = NULL;
@@ -778,11 +798,19 @@ void CScreenShareRemoteAssistantDlg::notifyMove(POINT &rt)
 			m_hMarkWnd = hMarkWnd;
 			Invalidate();
 		}
+#endif
+		//::PostMessage(m_hMarkWnd, WM_NCHITTEST, NULL, MAKELPARAM(rt.x, rt.y));
+		//::PostMessage(m_hMarkWnd, WM_SETCURSOR, WPARAM(m_hMarkWnd), MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
+		//::PostMessage(m_hMarkWnd, WM_MOUSEMOVE, NULL, MAKELPARAM(rt.x, rt.y));
+		SetCursorPos(rt.x, rt.y);
+		mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE,rt.x, rt.y, 0, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyChar(char ch)
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+		keybd_event(ch, 0, 0, 0);
+		keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyCopy(const std::string &msg)

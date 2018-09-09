@@ -78,8 +78,10 @@ protected:
 
 	inline void parseMsg(const std::string &msg);
 	inline void notifyLbtnDown(POINT &pt);
+	inline void notifyLbtnUp(POINT &pt);
 	inline void notifyLbtnDClick(POINT &pt);
 	inline void notifyRbtnDown(POINT &pt);
+	inline void notifyRbtnUp(POINT &prt);
 	inline void notifyRbtnDClick(POINT &pt);
 	inline void notifyMove(POINT &rt);
 	inline void notifyChar(char ch);
