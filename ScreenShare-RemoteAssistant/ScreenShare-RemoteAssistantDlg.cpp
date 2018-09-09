@@ -678,6 +678,15 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 			notifyLbtnDown(pt);
 		}
 			break;
+		case eTransfer_Mouse_LBtnUp:{
+			int nXpos = 0;
+			int nYpos = 0;
+			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
+			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
+			CPoint pt(nXpos, nYpos);
+			notifyLbtnUp(pt);
+		}
+			break;
 		case eTransfer_Mouse_LBtnDClick:{
 			int nXpos = 0;
 			int nYpos = 0;
@@ -694,6 +703,15 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
 			CPoint pt(nXpos, nYpos);
 			notifyRbtnDown(pt);
+		}
+			break;
+		case eTransfer_Mouse_RBtnUp:{
+			int nXpos = 0;
+			int nYpos = 0;
+			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
+			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
+			CPoint pt(nXpos, nYpos);
+			notifyRbtnUp(pt);
 		}
 			break;
 		case eTransfer_Mouse_RBtnDClick:{
@@ -802,8 +820,8 @@ void CScreenShareRemoteAssistantDlg::notifyMove(POINT &rt)
 		//::PostMessage(m_hMarkWnd, WM_NCHITTEST, NULL, MAKELPARAM(rt.x, rt.y));
 		//::PostMessage(m_hMarkWnd, WM_SETCURSOR, WPARAM(m_hMarkWnd), MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
 		//::PostMessage(m_hMarkWnd, WM_MOUSEMOVE, NULL, MAKELPARAM(rt.x, rt.y));
+		mouse_event(MOUSEEVENTF_MOVE, rt.x, rt.y, 0, 0);
 		SetCursorPos(rt.x, rt.y);
-		mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE,rt.x, rt.y, 0, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyChar(char ch)
