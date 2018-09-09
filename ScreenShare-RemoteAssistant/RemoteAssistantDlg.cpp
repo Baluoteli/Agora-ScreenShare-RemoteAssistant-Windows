@@ -482,6 +482,7 @@ void CRemoteAssistantDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 	else
 		m_AgoraRemoteTransfer.keyboard_charnum(wParam,nChar);
+
 #endif
 
 	m_AgoraRemoteTransfer.keyboard_charnum(wParam, nChar);

@@ -82,15 +82,15 @@ protected:
 	inline void notifyLbtnUp(POINT &pt);
 	inline void notifyLbtnDClick(POINT &pt);
 	inline void notifyRbtnDown(POINT &pt);
-	inline void notifyRbtnUp(POINT &prt);
+	inline void notifyRbtnUp(POINT &pt);
 	inline void notifyRbtnDClick(POINT &pt);
-	inline void notifyMove(POINT &rt);
-	inline void notifyChar(char ch);
+	inline void notifyMove(POINT &pt);
+	inline void notifyChar(WPARAM wParam,char ch);
 	inline void notifyCopy(const std::string &msg);
 	inline void notifyPaste(const std::string &msg);
 	inline void notifyStart();
 	inline void notifyStop();
-	inline void notifyWheel();
+	inline void notifyWheel(WPARAM wParam,POINT &pt);
 
 	static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
 

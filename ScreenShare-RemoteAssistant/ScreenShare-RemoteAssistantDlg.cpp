@@ -748,10 +748,23 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 			notifyMove(pt);
 		}
 			break;
+		case eTransfer_Mouse_Wheel:{
+			int nXpos = 0;
+			int nYpos = 0;
+			WPARAM wParam;
+			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
+			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
+			jsonObject["EventParam"].Get("wParam", wParam);
+			CPoint pt(nXpos, nYpos);
+			notifyWheel(wParam,pt);
+		}
+			break;
 		case eTransfer_KeyBoard_CharNum:{
 			int nNum;			
+			WPARAM wParam;
 			jsonObject["EventParam"].Get("input", nNum);
-			notifyChar((char)nNum);
+			jsonObject["EventParam"].Get("wParam", wParam);
+			notifyChar(wParam,(char)nNum);
 		}
 			break;
 		case eTransfer_KeyBoard_Copy:{
@@ -809,7 +822,7 @@ void CScreenShareRemoteAssistantDlg::notifyRbtnDClick(POINT &pt)
 	mouse_event(MOUSEEVENTF_RIGHTDOWN | MOUSEEVENTF_RIGHTUP, pt.x, pt.y, 0, 0);
 }
 
-void CScreenShareRemoteAssistantDlg::notifyMove(POINT &rt)
+void CScreenShareRemoteAssistantDlg::notifyMove(POINT &pt)
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 
@@ -836,13 +849,14 @@ void CScreenShareRemoteAssistantDlg::notifyMove(POINT &rt)
 		//::PostMessage(m_hMarkWnd, WM_NCHITTEST, NULL, MAKELPARAM(rt.x, rt.y));
 		//::PostMessage(m_hMarkWnd, WM_SETCURSOR, WPARAM(m_hMarkWnd), MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
 		//::PostMessage(m_hMarkWnd, WM_MOUSEMOVE, NULL, MAKELPARAM(rt.x, rt.y));
-		mouse_event(MOUSEEVENTF_MOVE, rt.x, rt.y, 0, 0);
-		SetCursorPos(rt.x, rt.y);
+		mouse_event(MOUSEEVENTF_MOVE, pt.x, pt.y, 0, 0);
+		SetCursorPos(pt.x, pt.y);
 }
 
-void CScreenShareRemoteAssistantDlg::notifyChar(char ch)
+void CScreenShareRemoteAssistantDlg::notifyChar(WPARAM wParam,char ch)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));
+
 		keybd_event(ch, 0, 0, 0);
 		keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
 }
@@ -869,10 +883,12 @@ void CScreenShareRemoteAssistantDlg::notifyStop()
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 }
 
-void CScreenShareRemoteAssistantDlg::notifyWheel()
+void CScreenShareRemoteAssistantDlg::notifyWheel(WPARAM wParam, POINT &pt)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
-		//mouse_event(MOUSEEVENTF_WHEEL,)
+	UINT fwkeys = GET_KEYSTATE_WPARAM(wParam);
+	short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	mouse_event(MOUSEEVENTF_WHEEL, pt.x, pt.y, zDelta,0);
 }
 
 BOOL CALLBACK CScreenShareRemoteAssistantDlg::WndEnumProc(HWND hWnd, LPARAM lParam)
