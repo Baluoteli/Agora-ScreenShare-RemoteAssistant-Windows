@@ -23,20 +23,6 @@ namespace AgoraRemoteTransfer {
 		eTransfer_UNKNOWN = 0xffff,
 
 	};
-	
-	//keyboard vk code.
-	const int const KVK_BACK = VK_BACK;
-	const int const KVK_TAB = VK_TAB;
-	const int const KVK_RETURN = VK_RETURN;
-	const int const KVK_CONTROL = VK_CONTROL;
-	const int const KVK_SHIFT = VK_SHIFT;
-	const int const KVK_SPACE = VK_SPACE;
-	const int const KVK_NUM_0 = 0x30;
-	const int const KVK_NUM_9 = 0x39;
-	const int const KVK_CHAR_A = 0x41;
-	const int const KVK_CHAR_Z = 0x5A;
-	const int const KVK_F1 = VK_F1;
-	const int const KVK_F12 = VK_F12;
 
 	//Remote Transfer Define
 
