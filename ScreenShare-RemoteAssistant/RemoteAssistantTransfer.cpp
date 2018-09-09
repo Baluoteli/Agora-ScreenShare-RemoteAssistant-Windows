@@ -65,7 +65,7 @@ void CAgoraRemoteTransfer::stop()
 		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
 }
 
-void CAgoraRemoteTransfer::mouse_LBtnDown(POINT pt)
+void CAgoraRemoteTransfer::mouse_LBtnDown(WPARAM wParam,POINT pt)
 {
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
@@ -86,7 +86,7 @@ void CAgoraRemoteTransfer::mouse_LBtnDown(POINT pt)
 		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
 }
 
-void CAgoraRemoteTransfer::mouse_LBtnUp(POINT pt)
+void CAgoraRemoteTransfer::mouse_LBtnUp(WPARAM wParam,POINT pt)
 {
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
@@ -107,7 +107,7 @@ void CAgoraRemoteTransfer::mouse_LBtnUp(POINT pt)
 		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
 }
 
-void CAgoraRemoteTransfer::mouse_LBtnDClick(POINT pt)
+void CAgoraRemoteTransfer::mouse_LBtnDClick(WPARAM wParam,POINT pt)
 {
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
@@ -128,7 +128,7 @@ void CAgoraRemoteTransfer::mouse_LBtnDClick(POINT pt)
 		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
 }
 
-void CAgoraRemoteTransfer::mouse_RBtnDown(POINT pt)
+void CAgoraRemoteTransfer::mouse_RBtnDown(WPARAM wParam,POINT pt)
 {
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
@@ -149,7 +149,7 @@ void CAgoraRemoteTransfer::mouse_RBtnDown(POINT pt)
 		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
 }
 
-void CAgoraRemoteTransfer::mouse_RBtnUp(POINT pt)
+void CAgoraRemoteTransfer::mouse_RBtnUp(WPARAM wParam,POINT pt)
 {
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
@@ -170,7 +170,7 @@ void CAgoraRemoteTransfer::mouse_RBtnUp(POINT pt)
 		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
 }
 
-void CAgoraRemoteTransfer::mouse_RBtnDClick(POINT pt)
+void CAgoraRemoteTransfer::mouse_RBtnDClick(WPARAM wParam,POINT pt)
 {
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
@@ -191,7 +191,7 @@ void CAgoraRemoteTransfer::mouse_RBtnDClick(POINT pt)
 		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
 }
 
-void CAgoraRemoteTransfer::mouse_Move(POINT pt)
+void CAgoraRemoteTransfer::mouse_Move(WPARAM wParam,POINT pt)
 {
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
@@ -212,7 +212,29 @@ void CAgoraRemoteTransfer::mouse_Move(POINT pt)
 		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
 }
 
-void CAgoraRemoteTransfer::keyboard_charnum(int nNum)
+void CAgoraRemoteTransfer::mouse_Wheel(WPARAM wParam, POINT pt)
+{
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
+	CJsonObject object;
+	object.Add("nCmdType", eTransfer_Mouse_Wheel);
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
+	object.Add("nTimeStamp", lTimeStamp);
+	object.AddEmptySubObject("EventParam");
+	object["EventParam"].AddEmptySubObject("point");
+	object["EventParam"]["point"].Add("xPos", pt.x);
+	object["EventParam"]["point"].Add("yPos", pt.y);
+	object["EventParam"].Add("wParam", wParam);
+
+	std::string str = object.ToString();
+	if (m_pSignalWrapper)
+		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
+}
+
+void CAgoraRemoteTransfer::keyboard_charnum(WPARAM wParam,int nNum)
 {
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
@@ -225,6 +247,7 @@ void CAgoraRemoteTransfer::keyboard_charnum(int nNum)
 	object.Add("nTimeStamp", lTimeStamp);
 	object.AddEmptySubObject("EventParam");
 	object["EventParam"].Add("input", nNum);
+	object["EventParam"].Add("wParam", wParam);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)

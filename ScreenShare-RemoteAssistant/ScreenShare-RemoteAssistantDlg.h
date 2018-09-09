@@ -90,6 +90,7 @@ protected:
 	inline void notifyPaste(const std::string &msg);
 	inline void notifyStart();
 	inline void notifyStop();
+	inline void notifyWheel();
 
 	static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
 

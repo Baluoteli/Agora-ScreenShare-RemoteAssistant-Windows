@@ -13,6 +13,7 @@ namespace AgoraRemoteTransfer {
 		eTransfer_Mouse_RBtnDown,
 		eTransfer_Mouse_RBtnUp,
 		eTransfer_Mouse_RBtnDClick,
+		eTransfer_Mouse_Wheel,
 		eTransfer_KeyBoard_CharNum,
 		eTransfer_KeyBoard_Copy,
 		eTransfer_KeyBoard_Paste,
@@ -51,14 +52,15 @@ namespace AgoraRemoteTransfer {
 
 		void start();
 		void stop();
-		void mouse_LBtnDown(POINT pt);
-		void mouse_LBtnUp(POINT pt);
-		void mouse_LBtnDClick(POINT pt);
-		void mouse_RBtnDown(POINT pt);
-		void mouse_RBtnUp(POINT pt);
-		void mouse_RBtnDClick(POINT pt);
-		void mouse_Move(POINT pt);
-		void keyboard_charnum(int nNum);
+		void mouse_LBtnDown(WPARAM wParam, POINT pt);
+		void mouse_LBtnUp(WPARAM wParam,POINT pt);
+		void mouse_LBtnDClick(WPARAM wParam,POINT pt);
+		void mouse_RBtnDown(WPARAM wParam,POINT pt);
+		void mouse_RBtnUp(WPARAM wParam,POINT pt);
+		void mouse_RBtnDClick(WPARAM wParam,POINT pt);
+		void mouse_Move(WPARAM wParam,POINT pt);
+		void mouse_Wheel(WPARAM wParam,POINT pt);
+		void keyboard_charnum(WPARAM wParam,int nNum);
 		void keyboard_copy(const std::string &copycontext);
 		void keyboard_paste(const std::string &pastecontext);
 

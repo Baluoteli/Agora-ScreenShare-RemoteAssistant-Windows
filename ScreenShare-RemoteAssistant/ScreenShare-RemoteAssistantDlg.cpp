@@ -395,7 +395,7 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded(WPARAM wPar
 	LPAGE_FIRST_REMOTE_VIDEO_DECODED lpData = (LPAGE_FIRST_REMOTE_VIDEO_DECODED)wParam;
 	if (lpData) {
 		
-		if (m_pScreenShareRemoteDlg) {
+		if (NULL == m_pScreenShareRemoteDlg) {
 
 			CRemoteAssistantDlg DlgRemoteAssistant(lpData->uid);
 			DlgRemoteAssistant.setRemoteScreenSolution(lpData->width, lpData->height);
@@ -869,6 +869,11 @@ void CScreenShareRemoteAssistantDlg::notifyStop()
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 }
 
+void CScreenShareRemoteAssistantDlg::notifyWheel()
+{
+		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+		//mouse_event(MOUSEEVENTF_WHEEL,)
+}
 
 BOOL CALLBACK CScreenShareRemoteAssistantDlg::WndEnumProc(HWND hWnd, LPARAM lParam)
 {
