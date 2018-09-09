@@ -21,7 +21,7 @@ CRemoteAssistantDlg::CRemoteAssistantDlg(UINT uID,CWnd* pParent /*=NULL*/)
 	m_pMediaWrapper(nullptr),
 	m_uRemoteID(uID)
 {
-
+	m_AgoraRemoteTransfer.setRemoteUID(CAgoraWrapperUtilc::int2str(uID));
 }
 
 CRemoteAssistantDlg::~CRemoteAssistantDlg()

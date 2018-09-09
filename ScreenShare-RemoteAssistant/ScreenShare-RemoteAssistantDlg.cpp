@@ -710,7 +710,7 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
 			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
 			CPoint pt(nXpos, nYpos);
-			notifyLbtnDown(pt);
+			notifyMove(pt);
 		}
 			break;
 		case eTransfer_KeyBoard_CharNum:{
