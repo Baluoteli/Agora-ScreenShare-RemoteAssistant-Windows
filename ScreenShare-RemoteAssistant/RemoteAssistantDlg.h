@@ -15,6 +15,8 @@ public:
 	CRemoteAssistantDlg(UINT uID, CWnd* pParent = NULL);   // standard constructor
 	virtual ~CRemoteAssistantDlg();
 
+	void setRemoteScreenSolution(int nWidth,int nHeight);
+
 // Dialog Data
 	enum { IDD = IDD_DIALOG_REMOTEASSISTANT };
 
@@ -66,6 +68,9 @@ private:
 
 	std::string m_strAccount;
 	std::string m_strAppId;
+
+	int m_nRemoteScreenX;
+	int m_nRemoteScreenY;
 
 	CAgoraMediaWrapper *m_pMediaWrapper;
 	CAgoraRemoteTransfer m_AgoraRemoteTransfer;

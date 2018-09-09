@@ -28,6 +28,12 @@ CRemoteAssistantDlg::~CRemoteAssistantDlg()
 {
 }
 
+void CRemoteAssistantDlg::setRemoteScreenSolution(int nWidth, int nHeight)
+{
+	m_nRemoteScreenX = nWidth;
+	m_nRemoteScreenY = nHeight;
+}
+
 void CRemoteAssistantDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
@@ -67,12 +73,12 @@ BOOL CRemoteAssistantDlg::OnInitDialog()
 	m_nScreenW = GetSystemMetrics(SM_CXSCREEN);
 	m_nScreenH = GetSystemMetrics(SM_CYSCREEN);
 
-	//MoveWindow(0, 0, m_nScreenW, m_nScreenH);
+	MoveWindow(0, 0, m_nScreenW, m_nScreenH);
 	m_penFrame.CreatePen(PS_SOLID, 4, RGB(0x00, 0xA0, 0xE9));
 	CRect rt;
 	GetClientRect(&rt);
 	ClientToScreen(&rt);
-	::SetWindowPos(m_hWnd,HWND_TOPMOST, rt.left, rt.top, rt.Width(), rt.Height(), SWP_SHOWWINDOW);
+	//::SetWindowPos(m_hWnd,HWND_TOPMOST, rt.left, rt.top, rt.Width(), rt.Height(), SWP_SHOWWINDOW);
 
 	m_pMediaWrapper = CAgoraMediaWrapper::getInstance();
 	if (m_pMediaWrapper) {
@@ -397,22 +403,34 @@ HRESULT CRemoteAssistantDlg::onChannelLeaved(WPARAM wParam, LPARAM lParam)
 
 void CRemoteAssistantDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
-	m_AgoraRemoteTransfer.mouse_LBtnDClick(point);
+	POINT ptRemote;
+	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
+	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
+	m_AgoraRemoteTransfer.mouse_LBtnDClick(ptRemote);
 }
 
 void CRemoteAssistantDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
-	m_AgoraRemoteTransfer.mouse_LBtnDown(point);
+	POINT ptRemote;
+	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
+	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
+	m_AgoraRemoteTransfer.mouse_LBtnDown(ptRemote);
 }
 
 void CRemoteAssistantDlg::OnRButtonDown(UINT nFlags, CPoint point)
 {
-	m_AgoraRemoteTransfer.mouse_RBtnDown(point);
+	POINT ptRemote;
+	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
+	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
+	m_AgoraRemoteTransfer.mouse_RBtnDown(ptRemote);
 }
 
 void CRemoteAssistantDlg::OnRButtonDblClk(UINT nFlags, CPoint point)
 {
-	m_AgoraRemoteTransfer.mouse_RBtnDClick(point);
+	POINT ptRemote;
+	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
+	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
+	m_AgoraRemoteTransfer.mouse_RBtnDClick(ptRemote);
 }
 
 void CRemoteAssistantDlg::OnMouseMove(UINT nFlags, CPoint point)
@@ -420,7 +438,10 @@ void CRemoteAssistantDlg::OnMouseMove(UINT nFlags, CPoint point)
 	//m_AgoraRemoteTransfer.mouse_Move(point);
 	//OutputDebugString(_T(__FUNCTION__));
 	//OutputDebugString(_T("\n"));
-	m_AgoraRemoteTransfer.mouse_Move(point);
+	POINT ptRemote;
+	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
+	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
+	m_AgoraRemoteTransfer.mouse_Move(ptRemote);
 }
 
 void CRemoteAssistantDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)

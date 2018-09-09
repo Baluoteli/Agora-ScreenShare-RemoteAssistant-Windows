@@ -88,6 +88,8 @@ protected:
 	inline void notifyStart();
 	inline void notifyStop();
 
+	static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
+
 private:
 
 	CEdit m_editChannelName;
@@ -111,6 +113,9 @@ private:
 	std::map<UINT, BOOL> m_mapRemoteUserStatus;
 
 	static UINT uSelectUID;
+
+	CList<HWND> m_listWnd;
+	HWND m_hMarkWnd;
 
 public:
 	afx_msg void OnBnClickedButtonJoin();

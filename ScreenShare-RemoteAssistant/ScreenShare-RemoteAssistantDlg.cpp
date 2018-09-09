@@ -395,6 +395,7 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded(WPARAM wPar
 	if (lpData) {
 		
 		CRemoteAssistantDlg DlgRemoteAssistant(lpData->uid);
+		DlgRemoteAssistant.setRemoteScreenSolution(lpData->width, lpData->height);
 		INT_PTR nResponse = DlgRemoteAssistant.DoModal();
 		if (IDOK == nResponse) {
 
@@ -758,6 +759,25 @@ void CScreenShareRemoteAssistantDlg::notifyRbtnDClick(POINT &pt)
 void CScreenShareRemoteAssistantDlg::notifyMove(POINT &rt)
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+
+		POSITION	pos = m_listWnd.GetHeadPosition();
+		CRect		rcMarkWnd;
+		HWND		hMarkWnd = NULL;
+		HWND		hFound = NULL;
+
+		while (pos != NULL) {
+			hFound = m_listWnd.GetNext(pos);
+			::GetWindowRect(hFound, &rcMarkWnd);
+			if (rcMarkWnd.PtInRect(rt)) {
+				hMarkWnd = hFound;
+				break;
+			}
+		}
+
+		if (hMarkWnd != m_hMarkWnd) {
+			m_hMarkWnd = hMarkWnd;
+			Invalidate();
+		}
 }
 
 void CScreenShareRemoteAssistantDlg::notifyChar(char ch)
@@ -778,9 +798,24 @@ void CScreenShareRemoteAssistantDlg::notifyPaste(const std::string &msg)
 void CScreenShareRemoteAssistantDlg::notifyStart()
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+		m_listWnd.RemoveAll();
+		::EnumWindows(&CScreenShareRemoteAssistantDlg::WndEnumProc, (LPARAM)&m_listWnd);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyStop()
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+}
+
+
+BOOL CALLBACK CScreenShareRemoteAssistantDlg::WndEnumProc(HWND hWnd, LPARAM lParam)
+{
+	CList<HWND> *lpListctrl = (CList<HWND> *)lParam;
+
+	LONG lStyle = ::GetWindowLong(hWnd, GWL_STYLE);
+
+	if ((lStyle&WS_VISIBLE) != 0 && (lStyle&(WS_POPUP | WS_SYSMENU)) != 0)
+		lpListctrl->AddTail(hWnd);
+
+	return TRUE;
 }
