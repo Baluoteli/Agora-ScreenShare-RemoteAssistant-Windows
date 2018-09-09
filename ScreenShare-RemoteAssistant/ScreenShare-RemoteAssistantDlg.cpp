@@ -849,7 +849,7 @@ void CScreenShareRemoteAssistantDlg::notifyMove(POINT &pt)
 		//::PostMessage(m_hMarkWnd, WM_NCHITTEST, NULL, MAKELPARAM(rt.x, rt.y));
 		//::PostMessage(m_hMarkWnd, WM_SETCURSOR, WPARAM(m_hMarkWnd), MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
 		//::PostMessage(m_hMarkWnd, WM_MOUSEMOVE, NULL, MAKELPARAM(rt.x, rt.y));
-		mouse_event(MOUSEEVENTF_MOVE, pt.x, pt.y, 0, 0);
+		//mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, pt.x, pt.y, 0, 0);
 		SetCursorPos(pt.x, pt.y);
 }
 
@@ -857,8 +857,18 @@ void CScreenShareRemoteAssistantDlg::notifyChar(WPARAM wParam,char ch)
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));
 
-		keybd_event(ch, 0, 0, 0);
-		keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
+		UINT uFlage = DWORD(LOWORD(wParam));
+		if (uFlage) {
+			UINT uVCode = DWORD(HIWORD(wParam));
+			keybd_event(uVCode, 0, 0, 0);
+			keybd_event(ch, 0, 0, 0);
+			keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
+			keybd_event(uVCode, 0, KEYEVENTF_KEYUP, 0);
+		}
+		else {
+			keybd_event(ch, 0, 0, 0);
+			keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
+		}
 }
 
 void CScreenShareRemoteAssistantDlg::notifyCopy(const std::string &msg)

@@ -108,14 +108,15 @@ void CRemoteAssistantDlg::uninitResource()
 {
 }
 
+
 int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 {
 	//Êó±ê: ×ó¼üµ¥»÷,×ó¼üË«»÷,ÓÒ¼üµ¥»÷,ÓÒ¼üË«»÷,ÍÏ¶¯.
 	//¼üÅÌ:Êý×Ö,×ÖÄ¸.
 	//¿ì½Ý¼ü:ctrl+c,ctrl+v
 	static bool bCtrlKey = false;
-	WPARAM wParam;
-	if (pMsg->hwnd == m_hWnd && false) {
+	WPARAM wParam = MAKEWPARAM(0, 0);
+	if (pMsg->hwnd == m_hWnd) {
 
 		switch (pMsg->message)
 		{
@@ -125,10 +126,10 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			int nXpos = GET_X_LPARAM(pMsg->lParam);
 			int nYpos = GET_Y_LPARAM(pMsg->lParam);
 			pt.SetPoint(nXpos, nYpos);
-			
-			m_AgoraRemoteTransfer.mouse_LBtnDClick(wParam,pt);
+
+			//m_AgoraRemoteTransfer.mouse_LBtnDClick(wParam,pt);
 		}
-			break;
+		break;
 		case WM_LBUTTONDOWN:
 		{
 			CPoint pt;
@@ -136,9 +137,9 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			int nYpos = GET_Y_LPARAM(pMsg->lParam);
 			pt.SetPoint(nXpos, nYpos);
 
-			m_AgoraRemoteTransfer.mouse_LBtnDown(wParam,pt);
+			//m_AgoraRemoteTransfer.mouse_LBtnDown(wParam,pt);
 		}
-			break;
+		break;
 		case WM_LBUTTONUP:
 		{
 			CPoint pt;
@@ -146,29 +147,29 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			int nYpos = GET_Y_LPARAM(pMsg->lParam);
 			pt.SetPoint(nXpos, nYpos);
 
-			m_AgoraRemoteTransfer.mouse_LBtnUp(wParam,pt);
+			//m_AgoraRemoteTransfer.mouse_LBtnUp(wParam,pt);
 		}
-			break;
+		break;
 		case WM_RBUTTONDBLCLK:
 		{
 			CPoint pt;
 			int nXpos = GET_X_LPARAM(pMsg->lParam);
 			int nYpos = GET_Y_LPARAM(pMsg->lParam);
-			pt.SetPoint(nXpos, nYpos);
+			//pt.SetPoint(nXpos, nYpos);
 
-			m_AgoraRemoteTransfer.mouse_RBtnDClick(wParam,pt);
+			m_AgoraRemoteTransfer.mouse_RBtnDClick(wParam, pt);
 		}
-			break;
-		case WM_RBUTTONUP: 
+		break;
+		case WM_RBUTTONUP:
 		{
 			CPoint pt;
 			int nXpos = GET_X_LPARAM(pMsg->lParam);
 			int nYpos = GET_Y_LPARAM(pMsg->lParam);
 			pt.SetPoint(nXpos, nYpos);
 
-			m_AgoraRemoteTransfer.mouse_RBtnUp(wParam,pt);
+			//m_AgoraRemoteTransfer.mouse_RBtnUp(wParam,pt);
 		}
-			break;
+		break;
 		case WM_RBUTTONDOWN:
 		{
 			CPoint pt;
@@ -176,9 +177,9 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			int nYpos = GET_Y_LPARAM(pMsg->lParam);
 			pt.SetPoint(nXpos, nYpos);
 
-			m_AgoraRemoteTransfer.mouse_RBtnDown(wParam,pt);
+			//m_AgoraRemoteTransfer.mouse_RBtnDown(wParam,pt);
 		}
-			break;
+		break;
 		case WM_MOUSEMOVE:
 		{
 			CPoint pt;
@@ -186,33 +187,35 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			int nYpos = GET_Y_LPARAM(pMsg->lParam);
 			pt.SetPoint(nXpos, nYpos);
 
-			m_AgoraRemoteTransfer.mouse_Move(wParam,pt);
+			//m_AgoraRemoteTransfer.mouse_Move(wParam,pt);
 		}
-			break;
+		break;
 		case WM_CHAR:
 		{
-// 			char ch = pMsg->wParam;
-// 			
-// 			if ('C' == ch || 'c' == ch)
-// 				m_AgoraRemoteTransfer.keyboard_copy("");
-// 			else if ('v' == ch || 'V' == ch)
-// 				m_AgoraRemoteTransfer.keyboard_paste("");
-// 			else
-// 				m_AgoraRemoteTransfer.keyboard_charnum(ch);
-// 			bCtrlKey = false;
+			// 			char ch = pMsg->wParam;
+			// 			
+			// 			if ('C' == ch || 'c' == ch)
+			// 				m_AgoraRemoteTransfer.keyboard_copy("");
+			// 			else if ('v' == ch || 'V' == ch)
+			// 				m_AgoraRemoteTransfer.keyboard_paste("");
+			// 			else
+			// 				m_AgoraRemoteTransfer.keyboard_charnum(ch);
+			// 			bCtrlKey = false;
 		}
-			break;
+		break;
 		case WM_KEYDOWN:
 		{
+#if 0
 			UINT nKeyCode = pMsg->wParam;
 			if (GetKeyState(VK_CONTROL) & 0x8000)
 				if (nKeyCode == _T('C'))
 					m_AgoraRemoteTransfer.keyboard_copy("");
 				else if (_T('V') == nKeyCode)
 					m_AgoraRemoteTransfer.keyboard_paste("");
+#endif
 
 			if (pMsg->wParam == 'V' && GetAsyncKeyState(VK_CONTROL)) {
-				 
+
 				int i = 0;
 			}
 
@@ -236,6 +239,7 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			case VK_SPACE:
 			case VK_TAB:
 			case VK_ESCAPE:
+				return CDialogEx::PreTranslateMessage(pMsg);
 			case VK_CONTROL:
 			case VK_SHIFT:
 				break;
@@ -243,12 +247,13 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 				break;
 			}
 		}
-			break;
+		break;
 		default:break;
 		}
 	}
-	
-	return CDialogEx::PreTranslateMessage(pMsg);
+
+	//return CDialogEx::PreTranslateMessage(pMsg);
+	return FALSE;
 }
 
 void CRemoteAssistantDlg::OnPaint()
@@ -469,21 +474,14 @@ void CRemoteAssistantDlg::OnMouseMove(UINT nFlags, CPoint point)
 }
 
 void CRemoteAssistantDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
-{	
-	WPARAM wParam;
-	wParam = MAKEWPARAM(nRepCnt, nFlags);
-
-#if 0
-	if (('C' == nChar || 'c' == nChar) && ::GetKeyState(VK_CONTROL) & 0x8000) {
-		m_AgoraRemoteTransfer.keyboard_copy("");
+{
+	WPARAM wParam = MAKEWPARAM(0, 0);
+	if (::GetKeyState(VK_CONTROL) & 0x8000) {
+		wParam = MAKEWPARAM(1, VK_CONTROL);
 	}
-	else if (('V' == nChar || 'v' == nChar) && ::GetKeyState(VK_CONTROL) & 0x8000) {
-		m_AgoraRemoteTransfer.keyboard_paste("");
+	else if (::GetKeyState(VK_SHIFT) & 0x8000) {
+		wParam = MAKEWPARAM(1, VK_SHIFT);
 	}
-	else
-		m_AgoraRemoteTransfer.keyboard_charnum(wParam,nChar);
-
-#endif
 
 	m_AgoraRemoteTransfer.keyboard_charnum(wParam, nChar);
 }
