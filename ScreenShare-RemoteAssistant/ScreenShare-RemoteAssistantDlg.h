@@ -8,6 +8,7 @@
 class CAgoraConfig;
 class CAgoraMediaWrapper;
 class CAgoraSignalWrapper;
+class CRemoteAssistantDlg;
 // CScreenShareRemoteAssistantDlg dialog
 class CScreenShareRemoteAssistantDlg : public CDialogEx
 {
@@ -118,6 +119,7 @@ private:
 
 	CList<HWND> m_listWnd;
 	HWND m_hMarkWnd;
+	CRemoteAssistantDlg* m_pScreenShareRemoteDlg;
 
 public:
 	afx_msg void OnBnClickedButtonJoin();

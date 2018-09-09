@@ -57,7 +57,8 @@ CScreenShareRemoteAssistantDlg::CScreenShareRemoteAssistantDlg(CWnd* pParent /*=
 	m_pAgoraMediaWrapper(nullptr),
 	m_pSignalWrapper(nullptr),
 	m_pAgoraConfig(nullptr),
-	m_hScreenWnd(nullptr)
+	m_hScreenWnd(nullptr),
+	m_pScreenShareRemoteDlg(nullptr)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -394,24 +395,26 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded(WPARAM wPar
 	LPAGE_FIRST_REMOTE_VIDEO_DECODED lpData = (LPAGE_FIRST_REMOTE_VIDEO_DECODED)wParam;
 	if (lpData) {
 		
-		CRemoteAssistantDlg DlgRemoteAssistant(lpData->uid);
-		DlgRemoteAssistant.setRemoteScreenSolution(lpData->width, lpData->height);
-		INT_PTR nResponse = DlgRemoteAssistant.DoModal();
-		if (IDOK == nResponse) {
+		if (m_pScreenShareRemoteDlg) {
 
-		}
-		else if (IDCANCEL == nResponse) {
-			//Notify MainWnd RemoteAssistant Finished..
-			m_btnRemoteAssistant.EnableWindow(FALSE);
-			m_pAgoraMediaWrapper->setRemoteVideo(NULL, uSelectUID);
-			m_pAgoraMediaWrapper->muteRemoteAudioStream(uSelectUID, true);
-			m_pAgoraMediaWrapper->muteRemoteVideoStream(uSelectUID, true);
-			uSelectUID = 0;
-		}
+			CRemoteAssistantDlg DlgRemoteAssistant(lpData->uid);
+			DlgRemoteAssistant.setRemoteScreenSolution(lpData->width, lpData->height);
+			m_pScreenShareRemoteDlg = &DlgRemoteAssistant;
+			INT_PTR nResponse = DlgRemoteAssistant.DoModal();
+			if (IDOK == nResponse) {
 
+			}
+			else if (IDCANCEL == nResponse) {
+				//Notify MainWnd RemoteAssistant Finished..
+				m_btnRemoteAssistant.EnableWindow(FALSE);
+				m_pAgoraMediaWrapper->setRemoteVideo(NULL, uSelectUID);
+				m_pAgoraMediaWrapper->muteRemoteAudioStream(uSelectUID, true);
+				m_pAgoraMediaWrapper->muteRemoteVideoStream(uSelectUID, true);
+				uSelectUID = 0;
+			}
+		}
+			
 		delete lpData; lpData = nullptr;
-
-
 	}
 
 	return TRUE;
@@ -443,6 +446,19 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDUserJoined(WPARAM wParam, LPARAM lP
 
 LRESULT CScreenShareRemoteAssistantDlg::OnEIDUserOffline(WPARAM wParam, LPARAM lParam)
 {
+	LPAGE_USER_OFFLINE lpData = (LPAGE_USER_OFFLINE)wParam;
+	if (lpData) {
+
+		CString strRemoteID = CAgoraWrapperUtilc::s2cs(CAgoraWrapperUtilc::int2str(lpData->uid));
+		int nIndex = 0;
+		if (CB_ERR != (nIndex = m_ltMediaUserList.FindStringExact(0, strRemoteID))) {
+			m_ltMediaUserList.DeleteString(nIndex);
+
+			if (m_pScreenShareRemoteDlg && FALSE)
+				::PostMessage(m_pScreenShareRemoteDlg->m_hWnd, WM_DESTROY, 0, 0);
+		}
+	}
+
 	return TRUE;
 }
 
@@ -797,7 +813,7 @@ void CScreenShareRemoteAssistantDlg::notifyMove(POINT &rt)
 {
 		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 
-#if 1
+#if 0
 		POSITION	pos = m_listWnd.GetHeadPosition();
 		CRect		rcMarkWnd;
 		HWND		hMarkWnd = NULL;
