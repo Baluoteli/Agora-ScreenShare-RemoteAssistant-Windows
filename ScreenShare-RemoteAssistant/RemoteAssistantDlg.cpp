@@ -415,8 +415,15 @@ void CRemoteAssistantDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 	POINT ptRemote;
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
-	WPARAM wParam = MAKEWPARAM(0, 0);
+	WPARAM wParam = MAKEWPARAM(0, 0);	
+#if 0
+	UINT uDbTime = GetDoubleClickTime();
+	Sleep(uDbTime);
 	m_AgoraRemoteTransfer.mouse_LBtnDClick(wParam,ptRemote);
+#else 
+	m_AgoraRemoteTransfer.mouse_LBtnDown(wParam, ptRemote);
+	m_AgoraRemoteTransfer.mouse_LBtnUp(wParam, ptRemote);
+#endif
 }
 
 void CRemoteAssistantDlg::OnLButtonDown(UINT nFlags, CPoint point)
@@ -460,8 +467,15 @@ void CRemoteAssistantDlg::OnRButtonDblClk(UINT nFlags, CPoint point)
 	POINT ptRemote;
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
-	WPARAM wParam = MAKEWPARAM(0, 0);
+	WPARAM wParam = MAKEWPARAM(0, 0);	
+#if 0
+	UINT uDbTime = GetDoubleClickTime();
+	Sleep(uDbTime);
 	m_AgoraRemoteTransfer.mouse_RBtnDClick(wParam,ptRemote);
+#else
+	m_AgoraRemoteTransfer.mouse_RBtnDown(wParam, ptRemote);
+	m_AgoraRemoteTransfer.mouse_RBtnUp(wParam, ptRemote);
+#endif
 }
 
 void CRemoteAssistantDlg::OnMouseMove(UINT nFlags, CPoint point)
