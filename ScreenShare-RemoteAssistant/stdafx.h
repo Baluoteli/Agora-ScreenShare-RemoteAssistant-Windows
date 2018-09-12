@@ -55,6 +55,7 @@ using namespace  agora_sdk_win;
 #include <vector>
 #include <map>
 #include <list>
+#include <assert.h>
 
 #include "AgoraUitlc.h"
 using namespace AgoraSdkCWrapperUtilc;
