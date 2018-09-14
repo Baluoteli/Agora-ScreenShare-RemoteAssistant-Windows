@@ -196,6 +196,14 @@ void CAgoraRemoteTransfer::mouse_Move(WPARAM wParam,POINT pt)
 	OutputDebugString(_T(__FUNCTION__));
 	OutputDebugString(_T("\n"));
 
+	static POINT spt;
+	if (spt.x != pt.x && spt.y != pt.y) {
+		spt.x = pt.x;
+		spt.y = pt.y;
+	}
+	else
+		return;
+
 	CJsonObject object;
 	object.Add("nCmdType", eTransfer_Mouse_Move);
 	SYSTEMTIME st;

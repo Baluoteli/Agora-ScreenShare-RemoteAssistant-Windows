@@ -379,6 +379,7 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDLeaveChannel(WPARAM wParam, LPARAM 
 	if (lpData) {
 
 		m_checkMedia.SetCheck(FALSE);
+		m_ltMediaUserList.ResetContent();
 		delete lpData; lpData = nullptr;
 	}
 

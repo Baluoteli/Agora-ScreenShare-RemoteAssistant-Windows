@@ -235,11 +235,11 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			case VK_F12:
 				break;
 			case VK_BACK:
-			case VK_RETURN:
 			case VK_SPACE:
 			case VK_TAB:
 			case VK_ESCAPE:
 				return CDialogEx::PreTranslateMessage(pMsg);
+			case VK_RETURN:
 			case VK_CONTROL:
 			case VK_SHIFT:
 				break;
