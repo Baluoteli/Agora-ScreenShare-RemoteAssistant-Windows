@@ -727,6 +727,11 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 								  break;
 		case eTransfer_Mouse_Wheel:{
 			WPARAM wParam;
+			UINT fwkeys;
+			int zDelta;
+			jsonObject[EVENTPARAM][SCROLDELTA].Get("x", fwkeys);
+			jsonObject[EVENTPARAM][SCROLDELTA].Get("y", zDelta);
+			wParam = MAKEWPARAM(fwkeys, zDelta);
 			jsonObject[EVENTPARAM].Get("wParam", wParam);
 			notifyWheel(wParam, pt);
 		}
@@ -893,6 +898,7 @@ void CScreenShareRemoteAssistantDlg::notifyWheel(WPARAM wParam, POINT &pt)
 {
 	UINT fwkeys = GET_KEYSTATE_WPARAM(wParam);
 	short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+
 	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 	mouse_event(MOUSEEVENTF_WHEEL, pt.x, pt.y, zDelta, 0);
 }

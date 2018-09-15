@@ -215,10 +215,10 @@ void CAgoraRemoteTransfer::mouse_Wheel(WPARAM wParam, POINT pt)
 	object.Add(TIMESTAMP, lTimeStamp);
 	object.AddEmptySubObject(EVENTPARAM);
 	object[EVENTPARAM].AddEmptySubObject(SCROLDELTA);
-	int x = LOWORD(wParam);
-	int y = HIWORD(wParam);
-	object[EVENTPARAM][POSITION].Add("x", x);
-	object[EVENTPARAM][POSITION].Add("y", y);
+	UINT fwkeys = GET_KEYSTATE_WPARAM(wParam);
+	short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
+	object[EVENTPARAM][SCROLDELTA].Add("x", fwkeys);
+	object[EVENTPARAM][SCROLDELTA].Add("y", zDelta);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
