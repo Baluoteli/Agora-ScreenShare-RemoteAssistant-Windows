@@ -24,13 +24,13 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-// Dialog Data
+	// Dialog Data
 	enum { IDD = IDD_ABOUTBOX };
 
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 
-// Implementation
+	// Implementation
 protected:
 	DECLARE_MESSAGE_MAP()
 };
@@ -86,12 +86,12 @@ BEGIN_MESSAGE_MAP(CScreenShareRemoteAssistantDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BUTTON_REMOTE_ASSISTANT, &CScreenShareRemoteAssistantDlg::OnBnClickedButtonRemoteAssistant)
 	ON_MESSAGE(WM_MSGID(EID_JOINCHANNEL_SUCCESS), &CScreenShareRemoteAssistantDlg::OnEIDJoinChannelSuccess)
 	ON_MESSAGE(WM_MSGID(EID_REJOINCHANNEL_SUCCESS), &CScreenShareRemoteAssistantDlg::OnEIDReJoinChannelSuccess)
-	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL),CScreenShareRemoteAssistantDlg::OnEIDLeaveChannel)
+	ON_MESSAGE(WM_MSGID(EID_LEAVE_CHANNEL), CScreenShareRemoteAssistantDlg::OnEIDLeaveChannel)
 	ON_MESSAGE(WM_MSGID(EID_FIRST_LOCAL_VIDEO_FRAME), &CScreenShareRemoteAssistantDlg::OnEIDFirstLocalFrame)
 	ON_MESSAGE(WM_MSGID(EID_FIRST_REMOTE_VIDEO_DECODED), &CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded)
 	ON_MESSAGE(WM_MSGID(EID_USER_JOINED), &CScreenShareRemoteAssistantDlg::OnEIDUserJoined)
 	ON_MESSAGE(WM_MSGID(EID_USER_OFFLINE), &CScreenShareRemoteAssistantDlg::OnEIDUserOffline)
-	ON_MESSAGE(WM_MSGID(EID_USER_MUTE_AUDIO),&CScreenShareRemoteAssistantDlg::OnEIDMuteAudio)
+	ON_MESSAGE(WM_MSGID(EID_USER_MUTE_AUDIO), &CScreenShareRemoteAssistantDlg::OnEIDMuteAudio)
 	ON_MESSAGE(WM_MSGID(EID_USER_MUTE_VIDEO), &CScreenShareRemoteAssistantDlg::OnEIDMuteVideo)
 	ON_MESSAGE(WM_MSGID(EID_REMOTE_VIDEO_STAT), &CScreenShareRemoteAssistantDlg::OnRemoteVideoStat)
 	ON_MESSAGE(WM_MSGID(EID_START_RCDSRV), &CScreenShareRemoteAssistantDlg::OnStartRecordingService)
@@ -278,7 +278,7 @@ void CScreenShareRemoteAssistantDlg::OnBnClickedButtonJoin()
 	// TODO: Add your control notification handler code here
 	m_pAgoraMediaWrapper->EnableSDKVideoCapture(FALSE);
 	m_pAgoraMediaWrapper->setChannelProfile(CHANNEL_PROFILE_LIVE_BROADCASTING);
-	UINT uid  = CAgoraWrapperUtilc::str2int(m_pAgoraConfig->getLoginUID());
+	UINT uid = CAgoraWrapperUtilc::str2int(m_pAgoraConfig->getLoginUID());
 	//m_pAgoraMediaWrapper->setLocalVideo(m_hWnd,uid);
 
 	m_pAgoraMediaWrapper->enableVideo(TRUE);
@@ -288,7 +288,7 @@ void CScreenShareRemoteAssistantDlg::OnBnClickedButtonJoin()
 	//m_pAgoraMediaWrapper->muteAllRemoteVideoStreams(TRUE);
 
 	m_pAgoraMediaWrapper->setVideoProfile(VIDEO_PROFILE_TYPE::VIDEO_PROFILE_480P_10, FALSE);
-	m_pAgoraMediaWrapper->setClientRole(CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER,NULL);
+	m_pAgoraMediaWrapper->setClientRole(CLIENT_ROLE_TYPE::CLIENT_ROLE_BROADCASTER, NULL);
 
 	m_pAgoraMediaWrapper->getRtcEngine()->startPreview();
 
@@ -309,7 +309,7 @@ void CScreenShareRemoteAssistantDlg::OnBnClickedButtonLeave()
 	// TODO: Add your control notification handler code here
 
 	if (m_pAgoraMediaWrapper) {
-		
+
 		m_pAgoraMediaWrapper->leaveChannel();
 		m_pAgoraMediaWrapper->getRtcEngine()->stopPreview();
 		UINT uid = CAgoraWrapperUtilc::str2int(m_pAgoraConfig->getLoginUID());
@@ -335,7 +335,7 @@ void CScreenShareRemoteAssistantDlg::OnBnClickedButtonRemoteAssistant()
 	UINT uRemoteID = CAgoraWrapperUtilc::str2int(CAgoraWrapperUtilc::cs2s(strSelectText));
 	if (uRemoteID == uSelectUID)
 		AfxMessageBox(L"Already Remote Assisting .please Switch Remote User..");
-	
+
 	if (0 != uRemoteID)
 		m_btnRemoteAssistant.EnableWindow(TRUE);
 
@@ -395,7 +395,7 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded(WPARAM wPar
 {
 	LPAGE_FIRST_REMOTE_VIDEO_DECODED lpData = (LPAGE_FIRST_REMOTE_VIDEO_DECODED)wParam;
 	if (lpData) {
-		
+
 		if (NULL == m_pScreenShareRemoteDlg) {
 
 			CRemoteAssistantDlg DlgRemoteAssistant(lpData->uid);
@@ -414,7 +414,7 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDFirstRemoteFrameDecoded(WPARAM wPar
 				uSelectUID = 0;
 			}
 		}
-			
+
 		delete lpData; lpData = nullptr;
 	}
 
@@ -467,7 +467,7 @@ LRESULT CScreenShareRemoteAssistantDlg::OnEIDMuteVideo(WPARAM wParam, LPARAM lPa
 {
 	LPAGE_USER_MUTE_AUDIO lpData = (LPAGE_USER_MUTE_AUDIO)wParam;
 	if (lpData) {
-		
+
 		if (lpData->muted && lpData->uid == uSelectUID) {
 			m_btnRemoteAssistant.EnableWindow(TRUE);
 		}
@@ -497,7 +497,7 @@ LRESULT CScreenShareRemoteAssistantDlg::OnRemoteVideoStat(WPARAM wParam, LPARAM 
 {
 	return TRUE;
 }
-			   
+
 LRESULT CScreenShareRemoteAssistantDlg::OnStartRecordingService(WPARAM wParam, LPARAM lParam)
 {
 	return TRUE;
@@ -612,7 +612,7 @@ HRESULT CScreenShareRemoteAssistantDlg::onMessageInstantReceive(WPARAM wParam, L
 	PAG_SIGNAL_MESSAGEINSTANCERECEIVE lpData = (PAG_SIGNAL_MESSAGEINSTANCERECEIVE)wParam;
 	if (lpData) {
 		CString strFormat;
-		strFormat.Format(L"[%s] : %s",CAgoraWrapperUtilc::s2cs(lpData->msg),CAgoraWrapperUtilc::s2cs(lpData->msg));
+		strFormat.Format(L"[%s] : %s", CAgoraWrapperUtilc::s2cs(lpData->msg), CAgoraWrapperUtilc::s2cs(lpData->msg));
 		m_ltSignalMsgInfo.AddString(strFormat);
 
 		parseMsg(lpData->msg);
@@ -627,7 +627,7 @@ HRESULT CScreenShareRemoteAssistantDlg::onMessageChannelReceive(WPARAM wParam, L
 {
 	PAG_SIGNAL_MESSAGECHANNELRECEIVE lpData = (PAG_SIGNAL_MESSAGECHANNELRECEIVE)wParam;
 	if (lpData) {
-		
+
 		delete lpData; lpData = nullptr;
 	}
 
@@ -678,7 +678,7 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 		uTimeStamp = lTimeStamp - uTimeStamp;
 		TRACE("Interval : %d ms\n", uTimeStamp);
 
-		static CPoint pt(0,0);
+		static CPoint pt(0, 0);
 		switch (uCmdType) {
 			if (eTransfer_Mouse_Move == uCmdType) {
 				int nXpos = 0;
@@ -693,84 +693,84 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 		case eTransfer_StartAssistant:{
 			notifyStart();
 		}
-			break;
+									  break;
 		case eTransfer_StopAssistant:
 			notifyStop();
 			break;
 		case eTransfer_Mouse_LBtnDown:{
 			notifyLbtnDown(pt);
 		}
-			break;
+									  break;
 		case eTransfer_Mouse_LBtnUp:{
 			notifyLbtnUp(pt);
 		}
-			break;
+									break;
 		case eTransfer_Mouse_LBtnDClick:{
 			notifyLbtnDClick(pt);
 		}
-			break;
+										break;
 		case eTransfer_Mouse_RBtnDown:{
 			notifyRbtnDown(pt);
 		}
-			break;
+									  break;
 		case eTransfer_Mouse_RBtnUp:{
 			notifyRbtnUp(pt);
 		}
-			break;
+									break;
 		case eTransfer_Mouse_RBtnDClick:{
 			notifyRbtnDClick(pt);
 		}
-			break;
+										break;
 		case eTransfer_Mouse_Move:{
 			notifyMove(pt);
 		}
-			break;
+								  break;
 		case eTransfer_Mouse_Wheel:{
 			WPARAM wParam;
 			jsonObject[EVENTPARAM].Get("wParam", wParam);
-			notifyWheel(wParam,pt);
+			notifyWheel(wParam, pt);
 		}
-			break;
+								   break;
 		case eTransfer_KeyBoard_KeyDown: {
 			int nVkCode = 0;
 			jsonObject[EVENTPARAM].Get(VKEYCODE, nVkCode);
 			notifyKeyDown(nVkCode);
 		}
-			break;
+										 break;
 		case eTransfer_KeyBoard_KeyUp: {
 			int nVkCode = 0;
 			jsonObject[EVENTPARAM].Get(VKEYCODE, nVkCode);
 			notifyKeyUp(nVkCode);
 		}
-			break;
+									   break;
 		case eTransfer_KeyBoard_KeyPress:{
 			int nNum;
 			WPARAM wParam;
 			jsonObject["EventParam"].Get("input", nNum);
 			jsonObject["EventParam"].Get("wParam", wParam);
-			notifyChar(wParam,(char)nNum);
+			notifyChar(wParam, (char)nNum);
 		}
-			break;
+										 break;
 		case eTransfer_KeyBoard_Copy:{
 			std::string strMsg;
 			jsonObject["EventParam"].Get("copyContent", strMsg);
 			notifyCopy(strMsg);
 		}
-			break;
+									 break;
 		case eTransfer_KeyBoard_Paste:{
 			std::string strMsg;
 			jsonObject["EventParam"].Get("pasteContent", strMsg);
 			notifyPaste(strMsg);
 		}
-			break;
+									  break;
 		}
 	}
 }
 
 void CScreenShareRemoteAssistantDlg::notifyLbtnDown(POINT &pt)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
-		mouse_event(MOUSEEVENTF_LEFTDOWN, pt.x, pt.y, 0, 0);
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	mouse_event(MOUSEEVENTF_LEFTDOWN, pt.x, pt.y, 0, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyLbtnUp(POINT &pt)
@@ -781,9 +781,9 @@ void CScreenShareRemoteAssistantDlg::notifyLbtnUp(POINT &pt)
 
 void CScreenShareRemoteAssistantDlg::notifyLbtnDClick(POINT &pt)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
-		mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, pt.x, pt.y, 0, 0);
-		mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, pt.x, pt.y, 0, 0);
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, pt.x, pt.y, 0, 0);
+	mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, pt.x, pt.y, 0, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyRbtnDown(POINT &pt)
@@ -808,51 +808,51 @@ void CScreenShareRemoteAssistantDlg::notifyRbtnDClick(POINT &pt)
 
 void CScreenShareRemoteAssistantDlg::notifyMove(POINT &pt)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 
 #if 0
-		POSITION	pos = m_listWnd.GetHeadPosition();
-		CRect		rcMarkWnd;
-		HWND		hMarkWnd = NULL;
-		HWND		hFound = NULL;
+	POSITION	pos = m_listWnd.GetHeadPosition();
+	CRect		rcMarkWnd;
+	HWND		hMarkWnd = NULL;
+	HWND		hFound = NULL;
 
-		while (pos != NULL) {
-			hFound = m_listWnd.GetNext(pos);
-			::GetWindowRect(hFound, &rcMarkWnd);
-			if (rcMarkWnd.PtInRect(rt)) {
-				hMarkWnd = hFound;
-				break;
-			}
+	while (pos != NULL) {
+		hFound = m_listWnd.GetNext(pos);
+		::GetWindowRect(hFound, &rcMarkWnd);
+		if (rcMarkWnd.PtInRect(rt)) {
+			hMarkWnd = hFound;
+			break;
 		}
+	}
 
-		if (hMarkWnd != m_hMarkWnd) {
-			m_hMarkWnd = hMarkWnd;
-			Invalidate();
-		}
+	if (hMarkWnd != m_hMarkWnd) {
+		m_hMarkWnd = hMarkWnd;
+		Invalidate();
+	}
 #endif
-		//::PostMessage(m_hMarkWnd, WM_NCHITTEST, NULL, MAKELPARAM(rt.x, rt.y));
-		//::PostMessage(m_hMarkWnd, WM_SETCURSOR, WPARAM(m_hMarkWnd), MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
-		//::PostMessage(m_hMarkWnd, WM_MOUSEMOVE, NULL, MAKELPARAM(rt.x, rt.y));
-		//mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, pt.x, pt.y, 0, 0);
-		SetCursorPos(pt.x, pt.y);
+	//::PostMessage(m_hMarkWnd, WM_NCHITTEST, NULL, MAKELPARAM(rt.x, rt.y));
+	//::PostMessage(m_hMarkWnd, WM_SETCURSOR, WPARAM(m_hMarkWnd), MAKELPARAM(HTCLIENT, WM_MOUSEMOVE));
+	//::PostMessage(m_hMarkWnd, WM_MOUSEMOVE, NULL, MAKELPARAM(rt.x, rt.y));
+	//mouse_event(MOUSEEVENTF_ABSOLUTE | MOUSEEVENTF_MOVE, pt.x, pt.y, 0, 0);
+	SetCursorPos(pt.x, pt.y);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyChar(WPARAM wParam,char ch)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));
 
-		UINT uFlage = DWORD(LOWORD(wParam));
-		if (uFlage) {
-			UINT uVCode = DWORD(HIWORD(wParam));
-			keybd_event(uVCode, 0, 0, 0);
-			keybd_event(ch, 0, 0, 0);
-			keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
-			keybd_event(uVCode, 0, KEYEVENTF_KEYUP, 0);
-		}
-		else {
-			keybd_event(ch, 0, 0, 0);
-			keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
-		}
+	UINT uFlage = DWORD(LOWORD(wParam));
+	if (uFlage) {
+		UINT uVCode = DWORD(HIWORD(wParam));
+		keybd_event(uVCode, 0, 0, 0);
+		keybd_event(ch, 0, 0, 0);
+		keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
+		keybd_event(uVCode, 0, KEYEVENTF_KEYUP, 0);
+	}
+	else {
+		keybd_event(ch, 0, 0, 0);
+		keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
+	}
 }
 
 void CScreenShareRemoteAssistantDlg::notifyKeyDown(int nVkCode)
@@ -869,24 +869,24 @@ void CScreenShareRemoteAssistantDlg::notifyKeyUp(int nVkCode)
 
 void CScreenShareRemoteAssistantDlg::notifyCopy(const std::string &msg)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 }
 
 void CScreenShareRemoteAssistantDlg::notifyPaste(const std::string &msg)
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 }
 
 void CScreenShareRemoteAssistantDlg::notifyStart()
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
-		m_listWnd.RemoveAll();
-		::EnumWindows(&CScreenShareRemoteAssistantDlg::WndEnumProc, (LPARAM)&m_listWnd);
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	m_listWnd.RemoveAll();
+	::EnumWindows(&CScreenShareRemoteAssistantDlg::WndEnumProc, (LPARAM)&m_listWnd);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyStop()
 {
-		OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
 }
 
 void CScreenShareRemoteAssistantDlg::notifyWheel(WPARAM wParam, POINT &pt)
@@ -894,7 +894,7 @@ void CScreenShareRemoteAssistantDlg::notifyWheel(WPARAM wParam, POINT &pt)
 	UINT fwkeys = GET_KEYSTATE_WPARAM(wParam);
 	short zDelta = GET_WHEEL_DELTA_WPARAM(wParam);
 	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));;
-	mouse_event(MOUSEEVENTF_WHEEL, pt.x, pt.y, zDelta,0);
+	mouse_event(MOUSEEVENTF_WHEEL, pt.x, pt.y, zDelta, 0);
 }
 
 BOOL CALLBACK CScreenShareRemoteAssistantDlg::WndEnumProc(HWND hWnd, LPARAM lParam)

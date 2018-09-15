@@ -46,21 +46,21 @@ namespace AgoraRemoteTransfer {
 		void start();
 		void stop();
 		void mouse_LBtnDown(WPARAM wParam, POINT pt);
-		void mouse_LBtnUp(WPARAM wParam,POINT pt);
-		void mouse_LBtnDClick(WPARAM wParam,POINT pt);
-		void mouse_RBtnDown(WPARAM wParam,POINT pt);
-		void mouse_RBtnUp(WPARAM wParam,POINT pt);
-		void mouse_RBtnDClick(WPARAM wParam,POINT pt);
-		void mouse_Move(WPARAM wParam,POINT pt);
-		void mouse_Wheel(WPARAM wParam,POINT pt);
+		void mouse_LBtnUp(WPARAM wParam, POINT pt);
+		void mouse_LBtnDClick(WPARAM wParam, POINT pt);
+		void mouse_RBtnDown(WPARAM wParam, POINT pt);
+		void mouse_RBtnUp(WPARAM wParam, POINT pt);
+		void mouse_RBtnDClick(WPARAM wParam, POINT pt);
+		void mouse_Move(WPARAM wParam, POINT pt);
+		void mouse_Wheel(WPARAM wParam, POINT pt);
 		void keyboard_keyDown(int  nVkCode);
 		void keyboard_keyUp(int nVkCode);
-		void keyboard_charnum(WPARAM wParam,int nNum);
+		void keyboard_charnum(WPARAM wParam, int nNum);
 		void keyboard_copy(const std::string &copycontext);
 		void keyboard_paste(const std::string &pastecontext);
 
 	private:
-		
+
 		std::string m_strCommUID;
 		CAgoraSignalWrapper* m_pSignalWrapper;
 	};
