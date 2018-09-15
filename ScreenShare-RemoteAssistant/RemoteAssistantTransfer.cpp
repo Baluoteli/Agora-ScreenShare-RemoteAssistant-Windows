@@ -33,12 +33,12 @@ void CAgoraRemoteTransfer::start()
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_StartAssistant);
+	object.Add(CMDTYPE, eTransfer_StartAssistant);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	int lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
 
 	std::string str = object.ToString();
 
@@ -52,12 +52,12 @@ void CAgoraRemoteTransfer::stop()
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_StopAssistant);
+	object.Add(CMDTYPE, eTransfer_StopAssistant);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
 
 	std::string str = object.ToString();
 
@@ -71,15 +71,12 @@ void CAgoraRemoteTransfer::mouse_LBtnDown(WPARAM wParam,POINT pt)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_Mouse_LBtnDown);
+	object.Add(CMDTYPE, eTransfer_Mouse_LBtnDown);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", pt.x);
-	object["EventParam"]["point"].Add("yPos", pt.y);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -92,15 +89,12 @@ void CAgoraRemoteTransfer::mouse_LBtnUp(WPARAM wParam,POINT pt)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_Mouse_LBtnUp);
+	object.Add(CMDTYPE, eTransfer_Mouse_LBtnUp);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", pt.x);
-	object["EventParam"]["point"].Add("yPos", pt.y);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -113,15 +107,12 @@ void CAgoraRemoteTransfer::mouse_LBtnDClick(WPARAM wParam,POINT pt)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_Mouse_LBtnDClick);
+	object.Add(CMDTYPE, eTransfer_Mouse_LBtnDClick);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", pt.x);
-	object["EventParam"]["point"].Add("yPos", pt.y);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -134,15 +125,12 @@ void CAgoraRemoteTransfer::mouse_RBtnDown(WPARAM wParam,POINT pt)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_Mouse_RBtnDown);
+	object.Add(CMDTYPE, eTransfer_Mouse_RBtnDown);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", pt.x);
-	object["EventParam"]["point"].Add("yPos", pt.y);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -155,15 +143,12 @@ void CAgoraRemoteTransfer::mouse_RBtnUp(WPARAM wParam,POINT pt)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_Mouse_RBtnUp);
+	object.Add(CMDTYPE, eTransfer_Mouse_RBtnUp);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", pt.x);
-	object["EventParam"]["point"].Add("yPos", pt.y);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -176,15 +161,12 @@ void CAgoraRemoteTransfer::mouse_RBtnDClick(WPARAM wParam,POINT pt)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_Mouse_RBtnDClick);
+	object.Add(CMDTYPE, eTransfer_Mouse_RBtnDClick);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", pt.x);
-	object["EventParam"]["point"].Add("yPos", pt.y);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -205,15 +187,15 @@ void CAgoraRemoteTransfer::mouse_Move(WPARAM wParam,POINT pt)
 		return;
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_Mouse_Move);
+	object.Add(CMDTYPE, eTransfer_Mouse_Move);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", pt.x);
-	object["EventParam"]["point"].Add("yPos", pt.y);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
+	object[EVENTPARAM].AddEmptySubObject(POSITION);
+	object[EVENTPARAM][POSITION].Add("x", pt.x);
+	object[EVENTPARAM][POSITION].Add("y", pt.y);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -226,16 +208,55 @@ void CAgoraRemoteTransfer::mouse_Wheel(WPARAM wParam, POINT pt)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_Mouse_Wheel);
+	object.Add(CMDTYPE, eTransfer_Mouse_Wheel);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", pt.x);
-	object["EventParam"]["point"].Add("yPos", pt.y);
-	object["EventParam"].Add("wParam", wParam);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
+	object[EVENTPARAM].AddEmptySubObject(SCROLDELTA);
+	int x = LOWORD(wParam);
+	int y = HIWORD(wParam);
+	object[EVENTPARAM][POSITION].Add("x", x);
+	object[EVENTPARAM][POSITION].Add("y", y);
+
+	std::string str = object.ToString();
+	if (m_pSignalWrapper)
+		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
+}
+
+void CAgoraRemoteTransfer::keyboard_keyDown(int nVkCode)
+{
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
+	CJsonObject object;
+	object.Add(CMDTYPE, eTransfer_KeyBoard_KeyDown);
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
+	object[EVENTPARAM].Add(VKEYCODE, nVkCode);
+
+	std::string str = object.ToString();
+	if (m_pSignalWrapper)
+		m_pSignalWrapper->sendInstantMsg(m_strCommUID, str);
+}
+
+void CAgoraRemoteTransfer::keyboard_keyUp(int nVkCode)
+{
+	OutputDebugString(_T(__FUNCTION__));
+	OutputDebugString(_T("\n"));
+
+	CJsonObject object;
+	object.Add(CMDTYPE, eTransfer_KeyBoard_KeyUp);
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
+	object[EVENTPARAM].Add(VKEYCODE, nVkCode);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -248,14 +269,14 @@ void CAgoraRemoteTransfer::keyboard_charnum(WPARAM wParam,int nNum)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_KeyBoard_CharNum);
+	object.Add(CMDTYPE, eTransfer_KeyBoard_KeyPress);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].Add("input", nNum);
-	object["EventParam"].Add("wParam", wParam);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
+	object[EVENTPARAM].Add("input", nNum);
+	object[EVENTPARAM].Add("wParam", wParam);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -268,13 +289,13 @@ void CAgoraRemoteTransfer::keyboard_copy(const std::string &copycontext)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_KeyBoard_Copy);
+	object.Add(CMDTYPE, eTransfer_KeyBoard_Copy);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].Add("copyContent", copycontext);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
+	object[EVENTPARAM].Add("copyContent", copycontext);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)
@@ -287,13 +308,13 @@ void CAgoraRemoteTransfer::keyboard_paste(const std::string &pastecontext)
 	OutputDebugString(_T("\n"));
 
 	CJsonObject object;
-	object.Add("nCmdType", eTransfer_KeyBoard_Paste);
+	object.Add(CMDTYPE, eTransfer_KeyBoard_Paste);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	long lTimeStamp = (st.wHour * 3600 + st.wMinute * 60 + st.wSecond) * 1000 + st.wMilliseconds;
-	object.Add("nTimeStamp", lTimeStamp);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].Add("pasteContent", pastecontext);
+	object.Add(TIMESTAMP, lTimeStamp);
+	object.AddEmptySubObject(EVENTPARAM);
+	object[EVENTPARAM].Add("pasteContent", pastecontext);
 
 	std::string str = object.ToString();
 	if (m_pSignalWrapper)

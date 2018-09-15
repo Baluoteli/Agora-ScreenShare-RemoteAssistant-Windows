@@ -168,7 +168,7 @@ BOOL CScreenShareRemoteAssistantDlg::OnInitDialog()
 	GetSystemTime(&st1);
 
 	CJsonObject object;
-	object.Add("nCmdType", 1024);
+	object.Add(CMDTYPE, 1024);
 	GetLocalTime(&st);
 	char szbuf[MAX_PATH] = { '\0' };
 	sprintf_s(szbuf, "%d:%d:%d:%d", st.wHour, st.wMinute, st.wMinute, st.wMilliseconds);
@@ -668,9 +668,9 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 	CJsonObject jsonObject(msg);
 
 	UINT uCmdType;
-	if (jsonObject.Get("nCmdType", uCmdType)) {
+	if (jsonObject.Get(CMDTYPE, uCmdType)) {
 		int uTimeStamp = 0;
-		jsonObject.Get("nTimeStamp", uTimeStamp);
+		jsonObject.Get(TIMESTAMP, uTimeStamp);
 
 		SYSTEMTIME st;
 		GetSystemTime(&st);
@@ -678,7 +678,18 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 		uTimeStamp = lTimeStamp - uTimeStamp;
 		TRACE("Interval : %d ms\n", uTimeStamp);
 
+		static CPoint pt(0,0);
 		switch (uCmdType) {
+			if (eTransfer_Mouse_Move == uCmdType) {
+				int nXpos = 0;
+				int nYpos = 0;
+				if (jsonObject["EventParam"]["point"].Get("xPos", nXpos) &&
+					jsonObject["EventParam"]["point"].Get("yPos", nYpos)) {
+					pt.x = nXpos;
+					pt.y = nYpos;
+				}
+			}
+
 		case eTransfer_StartAssistant:{
 			notifyStart();
 		}
@@ -687,81 +698,53 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 			notifyStop();
 			break;
 		case eTransfer_Mouse_LBtnDown:{
-			int nXpos = 0;
-			int nYpos = 0;
-			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
-			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
-			CPoint pt(nXpos, nYpos);
 			notifyLbtnDown(pt);
 		}
 			break;
 		case eTransfer_Mouse_LBtnUp:{
-			int nXpos = 0;
-			int nYpos = 0;
-			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
-			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
-			CPoint pt(nXpos, nYpos);
 			notifyLbtnUp(pt);
 		}
 			break;
 		case eTransfer_Mouse_LBtnDClick:{
-			int nXpos = 0;
-			int nYpos = 0;
-			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
-			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
-			CPoint pt(nXpos, nYpos);
 			notifyLbtnDClick(pt);
 		}
 			break;
 		case eTransfer_Mouse_RBtnDown:{
-			int nXpos = 0;
-			int nYpos = 0;
-			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
-			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
-			CPoint pt(nXpos, nYpos);
 			notifyRbtnDown(pt);
 		}
 			break;
 		case eTransfer_Mouse_RBtnUp:{
-			int nXpos = 0;
-			int nYpos = 0;
-			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
-			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
-			CPoint pt(nXpos, nYpos);
 			notifyRbtnUp(pt);
 		}
 			break;
 		case eTransfer_Mouse_RBtnDClick:{
-			int nXpos = 0;
-			int nYpos = 0;
-			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
-			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
-			CPoint pt(nXpos, nYpos);
 			notifyRbtnDClick(pt);
 		}
 			break;
 		case eTransfer_Mouse_Move:{
-			int nXpos = 0;
-			int nYpos = 0;
-			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
-			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
-			CPoint pt(nXpos, nYpos);
 			notifyMove(pt);
 		}
 			break;
 		case eTransfer_Mouse_Wheel:{
-			int nXpos = 0;
-			int nYpos = 0;
 			WPARAM wParam;
-			jsonObject["EventParam"]["point"].Get("xPos", nXpos);
-			jsonObject["EventParam"]["point"].Get("yPos", nYpos);
-			jsonObject["EventParam"].Get("wParam", wParam);
-			CPoint pt(nXpos, nYpos);
+			jsonObject[EVENTPARAM].Get("wParam", wParam);
 			notifyWheel(wParam,pt);
 		}
 			break;
-		case eTransfer_KeyBoard_CharNum:{
-			int nNum;			
+		case eTransfer_KeyBoard_KeyDown: {
+			int nVkCode = 0;
+			jsonObject[EVENTPARAM].Get(VKEYCODE, nVkCode);
+			notifyKeyDown(nVkCode);
+		}
+			break;
+		case eTransfer_KeyBoard_KeyUp: {
+			int nVkCode = 0;
+			jsonObject[EVENTPARAM].Get(VKEYCODE, nVkCode);
+			notifyKeyUp(nVkCode);
+		}
+			break;
+		case eTransfer_KeyBoard_KeyPress:{
+			int nNum;
 			WPARAM wParam;
 			jsonObject["EventParam"].Get("input", nNum);
 			jsonObject["EventParam"].Get("wParam", wParam);
@@ -870,6 +853,18 @@ void CScreenShareRemoteAssistantDlg::notifyChar(WPARAM wParam,char ch)
 			keybd_event(ch, 0, 0, 0);
 			keybd_event(ch, 0, KEYEVENTF_KEYUP, 0);
 		}
+}
+
+void CScreenShareRemoteAssistantDlg::notifyKeyDown(int nVkCode)
+{
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));
+	keybd_event(nVkCode, 0, 0, 0);
+}
+
+void CScreenShareRemoteAssistantDlg::notifyKeyUp(int nVkCode)
+{
+	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));
+	keybd_event(nVkCode, 0, KEYEVENTF_KEYUP, 0);
 }
 
 void CScreenShareRemoteAssistantDlg::notifyCopy(const std::string &msg)

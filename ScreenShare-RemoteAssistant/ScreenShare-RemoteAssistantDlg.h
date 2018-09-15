@@ -91,6 +91,8 @@ protected:
 	inline void notifyStart();
 	inline void notifyStop();
 	inline void notifyWheel(WPARAM wParam,POINT &pt);
+	inline void notifyKeyDown(int nVkCode);
+	inline void notifyKeyUp(int nVkCode);
 
 	static BOOL CALLBACK WndEnumProc(HWND hWnd, LPARAM lParam);
 

@@ -51,6 +51,7 @@ BEGIN_MESSAGE_MAP(CRemoteAssistantDlg, CDialogEx)
 	ON_WM_RBUTTONUP()
 	ON_WM_MOUSEMOVE()
 	ON_WM_KEYDOWN()
+	ON_WM_KEYUP()
 	ON_WM_MOUSEWHEEL()
 	ON_MESSAGE(WM_LoginSuccess,onLoginSuccess)
 	ON_MESSAGE(WM_LoginFailed,onLogFailed)
@@ -108,117 +109,35 @@ void CRemoteAssistantDlg::uninitResource()
 {
 }
 
-
 int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 {
-	//Êó±ê: ×ó¼üµ¥»÷,×ó¼üË«»÷,ÓÒ¼üµ¥»÷,ÓÒ¼üË«»÷,ÍÏ¶¯.
-	//¼üÅÌ:Êý×Ö,×ÖÄ¸.
-	//¿ì½Ý¼ü:ctrl+c,ctrl+v
-	static bool bCtrlKey = false;
 	WPARAM wParam = MAKEWPARAM(0, 0);
 	if (pMsg->hwnd == m_hWnd) {
+		CPoint pt;
+		int nXpos = GET_X_LPARAM(pMsg->lParam);
+		int nYpos = GET_Y_LPARAM(pMsg->lParam);
+		pt.SetPoint(nXpos, nYpos);
 
 		switch (pMsg->message)
 		{
 		case WM_LBUTTONDBLCLK:
-		{
-			CPoint pt;
-			int nXpos = GET_X_LPARAM(pMsg->lParam);
-			int nYpos = GET_Y_LPARAM(pMsg->lParam);
-			pt.SetPoint(nXpos, nYpos);
-
-			//m_AgoraRemoteTransfer.mouse_LBtnDClick(wParam,pt);
-		}
 		break;
 		case WM_LBUTTONDOWN:
-		{
-			CPoint pt;
-			int nXpos = GET_X_LPARAM(pMsg->lParam);
-			int nYpos = GET_Y_LPARAM(pMsg->lParam);
-			pt.SetPoint(nXpos, nYpos);
-
-			//m_AgoraRemoteTransfer.mouse_LBtnDown(wParam,pt);
-		}
 		break;
 		case WM_LBUTTONUP:
-		{
-			CPoint pt;
-			int nXpos = GET_X_LPARAM(pMsg->lParam);
-			int nYpos = GET_Y_LPARAM(pMsg->lParam);
-			pt.SetPoint(nXpos, nYpos);
-
-			//m_AgoraRemoteTransfer.mouse_LBtnUp(wParam,pt);
-		}
 		break;
 		case WM_RBUTTONDBLCLK:
-		{
-			CPoint pt;
-			int nXpos = GET_X_LPARAM(pMsg->lParam);
-			int nYpos = GET_Y_LPARAM(pMsg->lParam);
-			//pt.SetPoint(nXpos, nYpos);
-
-			m_AgoraRemoteTransfer.mouse_RBtnDClick(wParam, pt);
-		}
 		break;
 		case WM_RBUTTONUP:
-		{
-			CPoint pt;
-			int nXpos = GET_X_LPARAM(pMsg->lParam);
-			int nYpos = GET_Y_LPARAM(pMsg->lParam);
-			pt.SetPoint(nXpos, nYpos);
-
-			//m_AgoraRemoteTransfer.mouse_RBtnUp(wParam,pt);
-		}
 		break;
 		case WM_RBUTTONDOWN:
-		{
-			CPoint pt;
-			int nXpos = GET_X_LPARAM(pMsg->lParam);
-			int nYpos = GET_Y_LPARAM(pMsg->lParam);
-			pt.SetPoint(nXpos, nYpos);
-
-			//m_AgoraRemoteTransfer.mouse_RBtnDown(wParam,pt);
-		}
 		break;
 		case WM_MOUSEMOVE:
-		{
-			CPoint pt;
-			int nXpos = GET_X_LPARAM(pMsg->lParam);
-			int nYpos = GET_Y_LPARAM(pMsg->lParam);
-			pt.SetPoint(nXpos, nYpos);
-
-			//m_AgoraRemoteTransfer.mouse_Move(wParam,pt);
-		}
 		break;
 		case WM_CHAR:
-		{
-			// 			char ch = pMsg->wParam;
-			// 			
-			// 			if ('C' == ch || 'c' == ch)
-			// 				m_AgoraRemoteTransfer.keyboard_copy("");
-			// 			else if ('v' == ch || 'V' == ch)
-			// 				m_AgoraRemoteTransfer.keyboard_paste("");
-			// 			else
-			// 				m_AgoraRemoteTransfer.keyboard_charnum(ch);
-			// 			bCtrlKey = false;
-		}
 		break;
 		case WM_KEYDOWN:
 		{
-#if 0
-			UINT nKeyCode = pMsg->wParam;
-			if (GetKeyState(VK_CONTROL) & 0x8000)
-				if (nKeyCode == _T('C'))
-					m_AgoraRemoteTransfer.keyboard_copy("");
-				else if (_T('V') == nKeyCode)
-					m_AgoraRemoteTransfer.keyboard_paste("");
-#endif
-
-			if (pMsg->wParam == 'V' && GetAsyncKeyState(VK_CONTROL)) {
-
-				int i = 0;
-			}
-
 			switch (pMsg->wParam)
 			{
 			case VK_F1:
@@ -233,7 +152,6 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 			case VK_F10:
 			case VK_F11:
 			case VK_F12:
-				break;
 			case VK_BACK:
 			case VK_SPACE:
 			case VK_TAB:
@@ -252,7 +170,6 @@ int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
 		}
 	}
 
-	//return CDialogEx::PreTranslateMessage(pMsg);
 	return FALSE;
 }
 
@@ -416,14 +333,9 @@ void CRemoteAssistantDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);	
-#if 0
-	UINT uDbTime = GetDoubleClickTime();
-	Sleep(uDbTime);
-	m_AgoraRemoteTransfer.mouse_LBtnDClick(wParam,ptRemote);
-#else 
+
 	m_AgoraRemoteTransfer.mouse_LBtnDown(wParam, ptRemote);
 	m_AgoraRemoteTransfer.mouse_LBtnUp(wParam, ptRemote);
-#endif
 }
 
 void CRemoteAssistantDlg::OnLButtonDown(UINT nFlags, CPoint point)
@@ -468,14 +380,9 @@ void CRemoteAssistantDlg::OnRButtonDblClk(UINT nFlags, CPoint point)
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);	
-#if 0
-	UINT uDbTime = GetDoubleClickTime();
-	Sleep(uDbTime);
-	m_AgoraRemoteTransfer.mouse_RBtnDClick(wParam,ptRemote);
-#else
+
 	m_AgoraRemoteTransfer.mouse_RBtnDown(wParam, ptRemote);
 	m_AgoraRemoteTransfer.mouse_RBtnUp(wParam, ptRemote);
-#endif
 }
 
 void CRemoteAssistantDlg::OnMouseMove(UINT nFlags, CPoint point)
@@ -489,6 +396,7 @@ void CRemoteAssistantDlg::OnMouseMove(UINT nFlags, CPoint point)
 
 void CRemoteAssistantDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+#if 0
 	WPARAM wParam = MAKEWPARAM(0, 0);
 	if (::GetKeyState(VK_CONTROL) & 0x8000) {
 		wParam = MAKEWPARAM(1, VK_CONTROL);
@@ -496,8 +404,14 @@ void CRemoteAssistantDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	else if (::GetKeyState(VK_SHIFT) & 0x8000) {
 		wParam = MAKEWPARAM(1, VK_SHIFT);
 	}
+#endif
 
-	m_AgoraRemoteTransfer.keyboard_charnum(wParam, nChar);
+	m_AgoraRemoteTransfer.keyboard_keyDown(nChar);
+}
+
+void CRemoteAssistantDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+	m_AgoraRemoteTransfer.keyboard_keyUp(nChar);
 }
 
 BOOL CRemoteAssistantDlg::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
