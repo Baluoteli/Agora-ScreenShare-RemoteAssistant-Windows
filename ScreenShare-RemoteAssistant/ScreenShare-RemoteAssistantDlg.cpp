@@ -678,18 +678,18 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 		uTimeStamp = lTimeStamp - uTimeStamp;
 		TRACE("Interval : %d ms\n", uTimeStamp);
 
-		static CPoint pt(0, 0);
-		switch (uCmdType) {
-			if (eTransfer_Mouse_Move == uCmdType) {
-				int nXpos = 0;
-				int nYpos = 0;
-				if (jsonObject["EventParam"]["point"].Get("xPos", nXpos) &&
-					jsonObject["EventParam"]["point"].Get("yPos", nYpos)) {
-					pt.x = nXpos;
-					pt.y = nYpos;
-				}
+		static CPoint pt;
+		if (eTransfer_Mouse_Move == uCmdType) {
+			int nXpos = 0;
+			int nYpos = 0;
+			if (jsonObject[EVENTPARAM][POSITION].Get("x", nXpos) &&
+				jsonObject[EVENTPARAM][POSITION].Get("y", nYpos)) {
+				pt.x = nXpos;
+				pt.y = nYpos;
 			}
+		}
 
+		switch (uCmdType) {
 		case eTransfer_StartAssistant:{
 			notifyStart();
 		}
