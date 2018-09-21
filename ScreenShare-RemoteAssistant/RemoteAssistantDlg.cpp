@@ -406,7 +406,8 @@ void CRemoteAssistantDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	}
 #endif
 
-	m_AgoraRemoteTransfer.keyboard_keyDown(nChar);
+	UINT nCharConvert = getConvertChar(nChar);
+	m_AgoraRemoteTransfer.keyboard_keyDown(nCharConvert);
 }
 
 void CRemoteAssistantDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)

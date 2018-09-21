@@ -24,6 +24,92 @@ namespace AgoraRemoteTransfer {
 		eTransfer_KeyBoard_Paste = 1005,
 	};
 
+	enum KeyboardTransferType {
+		eKeyboardType_NULL = 0,
+		eKeyboardType_ESC,
+		eKeyboardType_F1,
+		eKeyboardType_F2,
+		eKeyboardType_F3,
+		eKeyboardType_F4,
+		eKeyboardType_F5,
+		eKeyboardType_F6,
+		eKeyboardType_F7,
+		eKeyboardType_F8,
+		eKeyboardType_F9,
+		eKeyboardType_F10,
+		eKeyboardType_F11,
+		eKeyboardType_F12,
+		eKeyboardType_Home,
+		eKeyboardType_End,
+		eKeyboardType_Insert,
+		eKeyboardType_Delete,
+		eKeyboardType_Comma,//~,`
+		eKeyboardType_Num0,
+		eKeyboardType_Num1,
+		eKeyboardType_Num2,
+		eKeyboardType_Num3,
+		eKeyboardType_Num4,
+		eKeyboardType_Num5,
+		eKeyboardType_Num6,
+		eKeyboardType_Num7,
+		eKeyboardType_Num8,
+		eKeyboardType_Num9,
+		eKeyboardType_Sub,//_,-
+		eKeyboardType_Equ,//+,=
+		eKeyboardType_BackSpace,
+		eKeyboardType_Tab,
+		eKeyboardType_Q,
+		eKeyboardType_W,
+		eKeyboardType_E,
+		eKeyboardType_R,
+		eKeyboardType_T,
+		eKeyboardType_Y,
+		eKeyboardType_U,
+		eKeyboardType_I,
+		eKeyboardType_O,
+		eKeyboardType_P,
+		eKeyboardType_Left_Parentheses,//{,[
+		eKeyboardType_Right_Parentheses,//},]
+		eKeyboardType_Right_Slash,//\,|
+		eKeyboardType_CapsLock,//uppercase and lowercase switch
+		eKeyboardType_A,
+		eKeyboardType_S,
+		eKeyboardType_D,
+		eKeyboardType_F,
+		eKeyboardType_G,
+		eKeyboardType_H,
+		eKeyboardType_J,
+		eKeyboardType_K,
+		eKeyboardType_L,
+		eKeyboardType_colon,//;,:
+		eKeyboardType_quotation,//',"
+		eKeyboardType_Enter,
+		eKeyboardType_Left_Shift,
+		eKeyboardType_Z,
+		eKeyboardType_X,
+		eKeyboardType_C,
+		eKeyboardType_V,
+		eKeyboardType_B,
+		eKeyboardType_N,
+		eKeyboardType_M,
+		eKeyboardType_Left_brackets,//<,,
+		eKeyboardType_Right_brackets,//>,.
+		eKeyboardType_Question,//?,/
+		eKeyboardType_Right_Shift,
+		eKeyboardType_Fn,
+		eKeyboardType_Left_Ctrl,
+		eKeyboardType_Windows,
+		eKeyboardType_Left_Alt, 
+		eKeyboardType_Space,
+		eKeyboardType_Right_Alt,
+		eKeyboardType_Right_Ctrl,
+		eKeyboardType_PgUp,
+		eKeyboardType_Left_Direction,
+		eKeyboardType_Top_Direction,
+		eKeyboardType_Botton_Direction,
+		eKeyboardType_PgDn,
+		eKeyboardType_Right_Direction,
+	};
 
 	//Remote Transfer Define
 #define EVENTPARAM	"param"
@@ -34,7 +120,7 @@ namespace AgoraRemoteTransfer {
 #define SCROLDELTA	"scrolDelta"
 
 
-	class CAgoraRemoteTransfer{
+	class CAgoraRemoteTransfer {
 
 	public:
 		CAgoraRemoteTransfer();

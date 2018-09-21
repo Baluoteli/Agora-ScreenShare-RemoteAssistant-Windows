@@ -739,13 +739,15 @@ void CScreenShareRemoteAssistantDlg::parseMsg(const std::string &msg)
 		case eTransfer_KeyBoard_KeyDown: {
 			int nVkCode = 0;
 			jsonObject[EVENTPARAM].Get(VKEYCODE, nVkCode);
-			notifyKeyDown(nVkCode);
+			UINT nVkSrcCode = getSrcChar(nVkCode);
+			notifyKeyDown(nVkSrcCode);
 		}
 										 break;
 		case eTransfer_KeyBoard_KeyUp: {
 			int nVkCode = 0;
 			jsonObject[EVENTPARAM].Get(VKEYCODE, nVkCode);
-			notifyKeyUp(nVkCode);
+			UINT nVkSrcCode = getSrcChar(nVkCode);
+			notifyKeyUp(nVkSrcCode);
 		}
 									   break;
 		case eTransfer_KeyBoard_KeyPress:{
@@ -842,7 +844,7 @@ void CScreenShareRemoteAssistantDlg::notifyMove(POINT &pt)
 	SetCursorPos(pt.x, pt.y);
 }
 
-void CScreenShareRemoteAssistantDlg::notifyChar(WPARAM wParam,char ch)
+void CScreenShareRemoteAssistantDlg::notifyChar(WPARAM wParam, char ch)
 {
 	OutputDebugString(_T(__FUNCTION__));	OutputDebugString(_T("\n"));
 

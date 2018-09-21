@@ -70,6 +70,8 @@ using namespace  AgoraSignleParamDef;
 #include "./JsonObject/CJsonObject.h"
 using namespace neb;
 
+UINT getConvertChar(UINT uSrcChar);
+UINT getSrcChar(UINT uConvertChar);
 
 #ifdef _UNICODE
 #if defined _M_IX86
