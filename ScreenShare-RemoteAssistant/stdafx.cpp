@@ -82,6 +82,7 @@ UINT getConvertChar(UINT uSrcChar)
 	case VK_OEM_2:nCharConvert = eKeyboardType_Question; break;
 	case VK_RSHIFT:nCharConvert = eKeyboardType_Right_Shift; break;
 	case VK_LCONTROL:nCharConvert = eKeyboardType_Left_Ctrl; break;
+	case VK_CONTROL:nCharConvert = eKeyboardType_Ctrl; break;
 	case VK_LWIN:nCharConvert = eKeyboardType_Windows; break;
 	case VK_LMENU:nCharConvert = eKeyboardType_Left_Alt; break;
 	case VK_SPACE:nCharConvert = eKeyboardType_Space; break;
@@ -175,6 +176,7 @@ UINT getSrcChar(UINT uConvertChar)
 	case eKeyboardType_Question:nSrcChar = VK_OEM_2; break;
 	case eKeyboardType_Right_Shift:nSrcChar = VK_RSHIFT; break;
 	case eKeyboardType_Left_Ctrl:nSrcChar = VK_LCONTROL; break;
+	case eKeyboardType_Ctrl:nSrcChar = VK_CONTROL; break;
 	case eKeyboardType_Windows:nSrcChar = VK_LWIN; break;
 	case eKeyboardType_Left_Alt:nSrcChar = VK_LMENU; break;
 	case eKeyboardType_Space:nSrcChar = VK_SPACE; break;

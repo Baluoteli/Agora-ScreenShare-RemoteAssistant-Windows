@@ -98,6 +98,7 @@ namespace AgoraRemoteTransfer {
 		eKeyboardType_Right_Shift,
 		eKeyboardType_Fn,
 		eKeyboardType_Left_Ctrl,
+		eKeyboardType_Ctrl,
 		eKeyboardType_Windows,
 		eKeyboardType_Left_Alt, 
 		eKeyboardType_Space,
