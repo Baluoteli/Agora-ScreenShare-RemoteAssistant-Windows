@@ -412,7 +412,8 @@ void CRemoteAssistantDlg::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CRemoteAssistantDlg::OnKeyUp(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	m_AgoraRemoteTransfer.keyboard_keyUp(nChar);
+	UINT nCharConvert = getConvertChar(nChar);
+	m_AgoraRemoteTransfer.keyboard_keyUp(nCharConvert);
 }
 
 BOOL CRemoteAssistantDlg::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
