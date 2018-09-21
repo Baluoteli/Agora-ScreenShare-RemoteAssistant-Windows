@@ -152,43 +152,6 @@ BOOL CScreenShareRemoteAssistantDlg::OnInitDialog()
 		return FALSE;
 	}
 
-	//to do
-	char ch = ',';
-	UINT ii = ch;
-	ch = '.';
-	ii = ch;
-	ch = '/';
-	ii = ch;
-#if 0
-
-	time_t ltime;
-	time(&ltime);
-	int lasttime = ltime;
-	Sleep(2000);
-	time(&ltime);
-	int nexttime = ltime;
-
-	SYSTEMTIME st, st1;
-	GetSystemTime(&st);
-	Sleep(1223);
-	GetSystemTime(&st1);
-
-	CJsonObject object;
-	object.Add(CMDTYPE, 1024);
-	GetLocalTime(&st);
-	char szbuf[MAX_PATH] = { '\0' };
-	sprintf_s(szbuf, "%d:%d:%d:%d", st.wHour, st.wMinute, st.wMinute, st.wMilliseconds);
-	object.Add("sTimtStamp", szbuf);
-	object.AddEmptySubObject("EventParam");
-	object["EventParam"].AddEmptySubObject("point");
-	object["EventParam"]["point"].Add("xPos", 10);
-	object["EventParam"]["point"].Add("yPos", 10);
-
-	std::string str = object.ToString();
-	str = object.ToFormattedString();
-
-#endif
-
 	initCtrl();
 	initMediaResource();
 	initSignalResource();
