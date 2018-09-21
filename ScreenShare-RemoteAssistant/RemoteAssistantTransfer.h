@@ -105,8 +105,8 @@ namespace AgoraRemoteTransfer {
 		eKeyboardType_Right_Ctrl,
 		eKeyboardType_PgUp,
 		eKeyboardType_Left_Direction,
-		eKeyboardType_Top_Direction,
-		eKeyboardType_Botton_Direction,
+		eKeyboardType_Up_Direction,
+		eKeyboardType_Down_Direction,
 		eKeyboardType_PgDn,
 		eKeyboardType_Right_Direction,
 	};

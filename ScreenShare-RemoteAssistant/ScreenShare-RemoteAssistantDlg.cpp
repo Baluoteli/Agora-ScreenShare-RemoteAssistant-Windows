@@ -153,6 +153,12 @@ BOOL CScreenShareRemoteAssistantDlg::OnInitDialog()
 	}
 
 	//to do
+	char ch = ',';
+	UINT ii = ch;
+	ch = '.';
+	ii = ch;
+	ch = '/';
+	ii = ch;
 #if 0
 
 	time_t ltime;
@@ -182,7 +188,6 @@ BOOL CScreenShareRemoteAssistantDlg::OnInitDialog()
 	str = object.ToFormattedString();
 
 #endif
-
 
 	initCtrl();
 	initMediaResource();
