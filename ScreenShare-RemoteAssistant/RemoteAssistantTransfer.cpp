@@ -179,7 +179,7 @@ void CAgoraRemoteTransfer::mouse_Move(WPARAM wParam,POINT pt)
 	OutputDebugString(_T("\n"));
 
 	static POINT spt;
-	if (spt.x != pt.x && spt.y != pt.y) {
+	if (spt.x != pt.x || spt.y != pt.y) {
 		spt.x = pt.x;
 		spt.y = pt.y;
 	}

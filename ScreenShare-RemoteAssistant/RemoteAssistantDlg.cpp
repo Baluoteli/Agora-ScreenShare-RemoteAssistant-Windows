@@ -19,7 +19,9 @@ CRemoteAssistantDlg::CRemoteAssistantDlg(UINT uID,CWnd* pParent /*=NULL*/)
 	m_nScreenH(0),
 	m_nScreenW(0),
 	m_pMediaWrapper(nullptr),
-	m_uRemoteID(uID)
+	m_uRemoteID(uID),
+	m_nSpaceW(0.0),
+	m_nSpaceH(0.0)
 {
 	m_AgoraRemoteTransfer.setRemoteUID(CAgoraWrapperUtilc::int2str(uID));
 }
@@ -32,6 +34,14 @@ void CRemoteAssistantDlg::setRemoteScreenSolution(int nWidth, int nHeight)
 {
 	m_nRemoteScreenX = nWidth;
 	m_nRemoteScreenY = nHeight;
+
+	if (0 == m_nScreenW || 0 == m_nScreenH) {
+
+		m_nScreenW = GetSystemMetrics(SM_CXSCREEN);
+		m_nScreenH = GetSystemMetrics(SM_CYSCREEN);
+	}
+
+	convertResolution();
 }
 
 void CRemoteAssistantDlg::DoDataExchange(CDataExchange* pDX)
@@ -74,10 +84,10 @@ BOOL CRemoteAssistantDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
-	m_nScreenW = GetSystemMetrics(SM_CXSCREEN);
-	m_nScreenH = GetSystemMetrics(SM_CYSCREEN);
+	int nScreenW = GetSystemMetrics(SM_CXSCREEN);
+	int nScreenH = GetSystemMetrics(SM_CYSCREEN);
 
-	MoveWindow(0, 0, m_nScreenW, m_nScreenH);
+	MoveWindow(0, 0, nScreenW, nScreenH);
 	m_penFrame.CreatePen(PS_SOLID, 4, RGB(0x00, 0xA0, 0xE9));
 	CRect rt;
 	GetClientRect(&rt);
@@ -107,6 +117,31 @@ void CRemoteAssistantDlg::initSignalResource()
 
 void CRemoteAssistantDlg::uninitResource()
 {
+}
+
+void CRemoteAssistantDlg::convertResolution()
+{
+	double dFlageRemote = m_nRemoteScreenX * 1.0 / m_nRemoteScreenY;
+	double dFlageLocal = m_nScreenW * 1.0 / m_nScreenH;
+
+	if (dFlageLocal >= dFlageRemote) {
+		m_nSpaceW = m_nScreenW - (m_nRemoteScreenX * (m_nScreenH * 1.0 / m_nRemoteScreenY));
+		m_nSpaceH = 0.0;
+	}
+
+	if (dFlageLocal < dFlageRemote) {
+		m_nSpaceW = 0.0;
+		m_nSpaceH = m_nScreenH - (m_nRemoteScreenY * (m_nScreenW *1.0 / m_nRemoteScreenX));
+	}
+
+	m_nScreenW -= m_nSpaceW;
+	m_nScreenH -= m_nSpaceH;
+}
+
+void CRemoteAssistantDlg::geneRemotePos(CPoint &ptSrc)
+{
+	ptSrc.x -= m_nSpaceW / 2 *1.0 ;
+	ptSrc.y -= m_nSpaceH /2 *1.0 ;
 }
 
 int CRemoteAssistantDlg::PreTranslateMessage(MSG* pMsg)
@@ -330,6 +365,7 @@ HRESULT CRemoteAssistantDlg::onChannelLeaved(WPARAM wParam, LPARAM lParam)
 void CRemoteAssistantDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 {
 	POINT ptRemote;
+	geneRemotePos(point);
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);	
@@ -341,6 +377,7 @@ void CRemoteAssistantDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
 void CRemoteAssistantDlg::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	POINT ptRemote;
+	geneRemotePos(point);
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);
@@ -350,6 +387,7 @@ void CRemoteAssistantDlg::OnLButtonDown(UINT nFlags, CPoint point)
 void CRemoteAssistantDlg::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	POINT ptRemote;
+	geneRemotePos(point);
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);
@@ -359,6 +397,7 @@ void CRemoteAssistantDlg::OnLButtonUp(UINT nFlags, CPoint point)
 void CRemoteAssistantDlg::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	POINT ptRemote;
+	geneRemotePos(point);
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);
@@ -368,6 +407,7 @@ void CRemoteAssistantDlg::OnRButtonDown(UINT nFlags, CPoint point)
 void CRemoteAssistantDlg::OnRButtonUp(UINT nFlags, CPoint point)
 {
 	POINT ptRemote;
+	geneRemotePos(point);
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);
@@ -377,6 +417,7 @@ void CRemoteAssistantDlg::OnRButtonUp(UINT nFlags, CPoint point)
 void CRemoteAssistantDlg::OnRButtonDblClk(UINT nFlags, CPoint point)
 {
 	POINT ptRemote;
+	geneRemotePos(point);
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);	
@@ -388,6 +429,7 @@ void CRemoteAssistantDlg::OnRButtonDblClk(UINT nFlags, CPoint point)
 void CRemoteAssistantDlg::OnMouseMove(UINT nFlags, CPoint point)
 {
 	POINT ptRemote;
+	geneRemotePos(point);
 	ptRemote.x = point.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = point.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	WPARAM wParam = MAKEWPARAM(0, 0);
@@ -421,6 +463,7 @@ BOOL CRemoteAssistantDlg::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 	WPARAM wParam;
 	wParam = MAKEWPARAM(nFlags,zDelta);
 	POINT ptRemote;
+	geneRemotePos(pt);
 	ptRemote.x = pt.x * 1.0 * m_nRemoteScreenX / m_nScreenW;
 	ptRemote.y = pt.y * 1.0 * m_nRemoteScreenY / m_nScreenH;
 	m_AgoraRemoteTransfer.mouse_Wheel(wParam, ptRemote);

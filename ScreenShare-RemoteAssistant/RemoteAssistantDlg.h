@@ -63,6 +63,9 @@ protected:
 	void initSignalResource();
 	void uninitResource();
 
+	void convertResolution();
+	void geneRemotePos(CPoint &ptSrc);
+
 private:
 
 	int m_nScreenW;
@@ -75,6 +78,9 @@ private:
 
 	int m_nRemoteScreenX;
 	int m_nRemoteScreenY;
+
+	double m_nSpaceW;
+	double m_nSpaceH;
 
 	CAgoraMediaWrapper *m_pMediaWrapper;
 	CAgoraRemoteTransfer m_AgoraRemoteTransfer;

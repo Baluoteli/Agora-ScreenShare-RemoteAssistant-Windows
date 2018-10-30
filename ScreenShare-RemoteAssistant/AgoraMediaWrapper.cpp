@@ -146,7 +146,7 @@ int CAgoraMediaWrapper::setLocalVideo(HWND hVideoWnd, UINT uid)
 int CAgoraMediaWrapper::setRemoteVideo(HWND hVideoWnd, UINT uid)
 {
 	VideoCanvas vc;
-	vc.renderMode = RENDER_MODE_TYPE::RENDER_MODE_HIDDEN;
+	vc.renderMode = RENDER_MODE_TYPE::RENDER_MODE_FIT;
 	vc.uid = uid;
 	vc.view = hVideoWnd;
 
